@@ -85,6 +85,7 @@ class NewTestForm extends React.Component {
 	createAssignment = (event) => {
 		event.preventDefault()
 	}
+	
 	render(){
 
 		let questionComponents = this.state.questions.map((question,index) => {
