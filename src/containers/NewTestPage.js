@@ -5,7 +5,7 @@ class NewTestPage extends React.Component {
 	render(){
 		return (
 			<div>
-				<NewTestForm />
+				<NewTestForm history={this.props.history}/>
 			</div>
 	)}
 }

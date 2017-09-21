@@ -1,5 +1,7 @@
 import React from 'react';
-
+import { connect } from 'react-redux'
+import {login} from '../actions/auth'
+import {Form, Segment, Button, Grid} from 'semantic-ui-react'
 
 class LoginForm extends React.Component {
 
@@ -16,29 +18,47 @@ class LoginForm extends React.Component {
 
 	handleSubmit = (event) => {
 		event.preventDefault()
-		console.log(this.state)
+		this.props.login(this.state, this.props.history)
 	}
 
 	render(){
+		console.log(this.props)
 		return (
-		<form onSubmit={this.handleSubmit}>
-			<label>Username</label>
-			<input type="text"
-				   name="username" 
-				   value={this.state.username} 
-				   placeholder="Username"
-				   onChange={this.handleChange}/>
-			<label>Password</label>
-			<input type="password"
-				   name="password" 
-				   value={this.state.password} 
-				   placeholder="Password"
-				   onChange={this.handleChange}/>
-			<input type="submit"
-				   name="Log In"/>
-		</form>)
-	}
+		<Grid centered verticalAlign="middle" columns = {3}>
+			<Grid.Column>
+				<Segment raised>
+					<Form onSubmit={this.handleSubmit}>
+						<Form.Input type="text"
+							   fluid
+							   name="username" 
+							   value={this.state.username} 
+							   placeholder="username"
+							   required
+							   onChange={this.handleChange}/>
+						<Form.Input type="password"
+							   name="password"
+							   fluid 
+							   value={this.state.password} 
+							   placeholder="password"
+							   required
+							   onChange={this.handleChange}/>
+						<Button fluid
+								type="submit"
+								color={(!!this.state.username && !!this.state.password) ? "green" : null}>log in</Button>
+					</Form>
+				</Segment>
+			</Grid.Column>
+		</Grid>
+	)}
 	
 }
 
-export default LoginForm
+function mapDispatchToProps (dispatch) {
+	return {
+		login: (userData, history) => {
+			dispatch(login(userData, history))
+		}
+	}
+}
+
+export default connect(null, mapDispatchToProps)(LoginForm)

@@ -1,6 +1,7 @@
 import React from 'react';
 import QuestionForm from './QuestionForm'
-import {Form, Button, Grid} from 'semantic-ui-react'
+import {ASSIGNMENT_TYPES, GRADES} from '../constants'
+import {Form, Grid, Segment, Button, Select, Rating} from 'semantic-ui-react'
 
 class NewTestForm extends React.Component {
 	state = {
@@ -67,7 +68,7 @@ class NewTestForm extends React.Component {
 
 			const splitName = name.split("-")
 			const newChoices = this.state.questions[questionNumber].choices.slice()
-			const index = parseInt(splitName[1])
+			const index = parseInt(splitName[1], 10)
 			newChoices[index] = value
 
 			newQuestions[questionNumber].choices = newChoices
@@ -102,18 +103,25 @@ class NewTestForm extends React.Component {
 								  />
 
 		})
-		
-		console.dir(this.state)
 
 		return (
 		<div>
 			<Form onSubmit={this.createAssignment}>
-				<Grid centered columns={1}>
-					{questionComponents}
-					<Grid.Row>
-						<Form.Button>Create Assignment</Form.Button>
-						<Form.Button onClick={this.addQuestion}>Add Question</Form.Button>
-					</Grid.Row>
+				<Grid centered columns={3}>
+					<Grid.Column width={3}/>
+					<Grid.Column width={10}>
+						{questionComponents}
+					</Grid.Column>
+					<Grid.Column width={3}>
+						<Segment style={{position: "fixed", top: "30%"}}>
+
+							<Select options={ASSIGNMENT_TYPES} placeholder="assignment type"/>
+							<Select options={GRADES} placeholder="grade"/>
+							<Rating maxRating={5} clearable/>
+							<Button fluid onClick={this.addQuestion}>Add Question</Button>
+							<Button fluid >Create Assignment</Button>
+						</Segment>
+					</Grid.Column>
 				</Grid>
 				
 			</Form>

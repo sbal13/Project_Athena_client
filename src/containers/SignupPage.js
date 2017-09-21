@@ -5,7 +5,7 @@ class SignupPage extends React.Component {
 	render(){
 		return (
 		<div>
-			<SignupForm />
+			<SignupForm history={this.props.history}/>
 		</div>)
 	}
 }

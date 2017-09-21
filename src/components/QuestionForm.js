@@ -1,5 +1,5 @@
 import React from 'react'
-import {Form, Button, Grid, Card, Checkbox} from 'semantic-ui-react'
+import {Form, Button, Grid, Card} from 'semantic-ui-react'
 
 
 class QuestionForm extends React.Component{
@@ -13,7 +13,7 @@ class QuestionForm extends React.Component{
 	}
 
 	changeAnswer = (event,data) => {
-		const choiceNumber = parseInt(data.name.split("-")[0])
+		const choiceNumber = parseInt(data.name.split("-")[0], 10)
 		this.props.changeAnswer(this.props.questionNumber, choiceNumber )	
 	}
 
@@ -22,7 +22,7 @@ class QuestionForm extends React.Component{
 	}
 
 	deleteChoice = (event) => {
-		const choiceNumber = parseInt(event.target.name.split("-")[0])
+		const choiceNumber = parseInt(event.target.name.split("-")[0], 10)
 		this.props.deleteChoice(this.props.questionNumber, choiceNumber)
 	}
 

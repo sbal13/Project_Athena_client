@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux'
 import {signup} from '../actions/auth'
-import {Form, Input, Segment, Button, Grid} from 'semantic-ui-react'
+import {Form, Segment, Button, Grid} from 'semantic-ui-react'
 import UserDetails from "./UserDetails"
 
 
@@ -33,7 +33,7 @@ class SignupForm extends React.Component {
 	}
 
 	handleFinalSubmit = () => {
-		this.props.signup(this.state)
+		this.props.signup(this.state, this.props.history)
 	}
 
 	initialDetailsFilled = () => {
@@ -129,8 +129,8 @@ class SignupForm extends React.Component {
 
 function mapDispatchToProps (dispatch) {
 	return {
-		signup: (userData) => {
-			dispatch(signup(userData))
+		signup: (userData, history) => {
+			dispatch(signup(userData, history))
 		}
 	}
 }
