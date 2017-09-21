@@ -1,20 +1,32 @@
 import React from 'react';
 import QuestionForm from './QuestionForm'
-import {ASSIGNMENT_TYPES, GRADES} from '../constants'
-import {Form, Grid, Segment, Button, Select, Rating} from 'semantic-ui-react'
+import {validateTest} from '../validators/validateTest'
+import {connect} from 'react-redux'
+
+import {ASSIGNMENT_TYPES, GRADES, SUBJECTS} from '../constants'
+import {newAssignment} from '../actions/assignments'
+import {Form, Grid, Card, Segment, Button, Select, Rating, TextArea, Input, Label} from 'semantic-ui-react'
 
 class NewTestForm extends React.Component {
 	state = {
 		questions: [{
 			question: "",
 			answer: "",
+			points: 0,
 			choices: [""]
-		}]
+		}],
+		difficulty: 0,
+		subject: "",
+		description: "",
+		assignmentType: "",
+		grade: "",
+		timed: false,
+		time: 0
 	}
 
 	addQuestion = () => {
 		this.setState({
-			questions: [...this.state.questions, {question: "",answer: "",choices: [""]}]
+			questions: [...this.state.questions, {question: "",answer: "", points: 0, choices: [""]}]
 		})
 	}
 
@@ -60,7 +72,7 @@ class NewTestForm extends React.Component {
 
 
 
-	handleChange = (questionNumber, name, value) => {
+	handleQuestionChange = (questionNumber, name, value) => {
 		
 		const newQuestions = this.state.questions.slice()
 
@@ -82,9 +94,27 @@ class NewTestForm extends React.Component {
 		this.setState({questions: newQuestions})
 	}
 
+	handleSelection = (event, data) => {
+		if (data.name === "difficulty") {
+			this.setState({difficulty: data.rating})
+		} else {
+			this.setState({
+				[data.name]: data.value
+			})
+		}
+	}
 
-	createAssignment = (event) => {
-		event.preventDefault()
+	handleAssignmentDetailChange = (event) => {
+		this.setState({[event.target.name]: event.target.value})
+	}
+
+
+	createAssignment = () => {
+		this.props.create(this.state, this.props.history)
+	}
+
+	toggleTime = () => {
+		this.setState({timed: !this.state.timed})
 	}
 	
 	render(){
@@ -92,7 +122,8 @@ class NewTestForm extends React.Component {
 		let questionComponents = this.state.questions.map((question,index) => {
 			return  <QuestionForm key={index}
 								  question={question.question}
-								  handleChange={this.handleChange}
+								  points={question.points}
+								  handleChange={this.handleQuestionChange}
 								  addChoice={this.addChoice}
 								  questionNumber={index} 
 								  answer={question.answer} 
@@ -104,23 +135,67 @@ class NewTestForm extends React.Component {
 
 		})
 
+		const valid = validateTest(this.state)
 		return (
 		<div>
-			<Form onSubmit={this.createAssignment}>
-				<Grid centered columns={3}>
-					<Grid.Column width={3}/>
-					<Grid.Column width={10}>
-						{questionComponents}
-					</Grid.Column>
-					<Grid.Column width={3}>
-						<Segment style={{position: "fixed", top: "30%"}}>
+			<Form>
+				<Grid columns={3}>
+					<Grid.Column width={1}/>
 
-							<Select options={ASSIGNMENT_TYPES} placeholder="assignment type"/>
-							<Select options={GRADES} placeholder="grade"/>
-							<Rating maxRating={5} clearable/>
-							<Button fluid onClick={this.addQuestion}>Add Question</Button>
-							<Button fluid >Create Assignment</Button>
-						</Segment>
+					<Grid.Column width={11}>
+						<Grid>
+							{questionComponents}
+						</Grid>
+					</Grid.Column>
+
+					<Grid.Column width={4}>
+
+						<Card style={{position: "fixed", top: "20%"}}>
+							<Card.Header>assignment details</Card.Header>
+							<Card.Content>
+								<TextArea name="description" 
+										  value={this.state.description} 
+										  rows={5}
+										  onChange={this.handleAssignmentDetailChange}
+										  placeholder="describe this assignment"/>
+								<Select options={ASSIGNMENT_TYPES} 
+										placeholder="assignment type"
+										name="assignmentType"
+										fluid
+										onChange={this.handleSelection}/>
+								<Select options={SUBJECTS} 
+										placeholder="subject"
+										name="subject"
+										fluid
+										onChange={this.handleSelection}/>
+								<Select options={GRADES} 
+										placeholder="grade"
+										name="grade"
+										fluid
+										onChange={this.handleSelection}/>
+								<Segment>
+									
+									<Input labelPosition='right' fluid type='number' placeholder='Time'>
+										<Button toggle active={this.state.timed} onClick={this.toggleTime}>Timed</Button>
+										<input onChange={this.handleAssignmentDetailChange} name="time" value={this.state.time}/>
+										<Label>mins</Label>
+									</Input>
+								</Segment>
+								<Segment>
+									<strong>difficulty</strong>
+									<Rating maxRating={5} 
+											clearable
+											icon="star"
+											rating={this.state.rating}
+											size="massive"
+											label="difficulty"
+											name="difficulty"
+											onRate={this.handleSelection}/>
+								</Segment>
+							</Card.Content>
+							<Button fluid color="teal" onClick={this.addQuestion}>Add Question</Button>
+							<Button fluid color={valid ? "green" : null} disabled={!valid} onClick={this.createAssignment}>Create Assignment</Button>
+						</Card>
 					</Grid.Column>
 				</Grid>
 				
@@ -131,4 +206,12 @@ class NewTestForm extends React.Component {
 	)}
 }
 
-export default NewTestForm
+
+function mapDispatchToProps(dispatch){
+	return {create: (assignmentData, history) => {
+			dispatch(newAssignment(assignmentData, history))
+		}
+	}
+}	
+
+export default connect(null, mapDispatchToProps)(NewTestForm)

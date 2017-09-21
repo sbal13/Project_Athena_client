@@ -5,12 +5,13 @@ import 'semantic-ui-css/semantic.min.css';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import authReducer from './reducers/authReducer'
+import assignmentReducer from './reducers/assignmentReducer'
 import {BrowserRouter as Router} from 'react-router-dom'
 import thunk from 'redux-thunk';
 import { Provider } from 'react-redux'
 import { createStore, applyMiddleware, combineReducers } from 'redux'
 
-const rootReducer = combineReducers({auth:authReducer})
+const rootReducer = combineReducers({auth:authReducer, assignment:assignmentReducer})
 
 const store = createStore(rootReducer, applyMiddleware(thunk))
 

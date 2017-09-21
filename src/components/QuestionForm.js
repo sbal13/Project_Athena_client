@@ -1,5 +1,5 @@
 import React from 'react'
-import {Form, Button, Grid, Card} from 'semantic-ui-react'
+import {Form, Button, Grid, Card, Input, Label} from 'semantic-ui-react'
 
 
 class QuestionForm extends React.Component{
@@ -31,7 +31,7 @@ class QuestionForm extends React.Component{
 		let choices = this.props.choices.map((choice, index) => {
 			return (
 				<Card fluid key={index}>
-					<Card.Header textAlign="center">{`Choice ${index+1}`}</Card.Header>
+					<Card.Header textAlign="center">{`Choice ${index+1}`}<Button floated="right" style={{background: "#820c0c", color: "white"}} size="tiny" name={`${index}-delete`} onClick={this.deleteChoice}>X</Button></Card.Header>
 
 					<Card.Content>
 						<Form.TextArea onChange={this.handleChange}
@@ -46,35 +46,49 @@ class QuestionForm extends React.Component{
 					   		    name={`${index}-set-answer`}
 					            onClick={this.changeAnswer}/>
 
-						<Button floated="right" color="red" size="small" name={`${index}-delete`} onClick={this.deleteChoice}>X</Button>
+						
 					</Card.Content>
 				</Card>
 		)})	
 
 		return(
 			<Grid.Row>
-				<Grid.Column width={9}>
+				<Grid.Column>
 					<Card fluid raised>
-						<Card.Content textAlign="center" header = {`Question #${this.props.questionNumber+1}`}/>
+						<Card.Header textAlign="center">
+							<Button floated="left" color="blue" onClick={this.addChoice}>{`Add Choice to Question ${this.props.questionNumber+1}`}</Button>
+							<Button floated="right" color="orange" onClick={this.deleteQuestion}>Delete Question</Button>
+						</Card.Header>
 						<Card.Content>
-							<label>Question</label>
-							<Form.TextArea onChange={this.handleChange} 
-										   name="question" 
-										   autoHeight
-										   rows={2}
-										   value={this.props.question}/>
-							<Grid centered columns={1}>
+							<Grid centered columns={2}>
 								<Grid.Row>
-									<Grid.Column>
-										<Card.Group itemsPerRow={3}>
+									<Grid.Column width={14}>
+										<label>Question</label>
+										<Form.TextArea onChange={this.handleChange} 
+											   name="question" 
+											   autoHeight
+											   rows={1}
+											   value={this.props.question}/>
+									</Grid.Column>
+									<Grid.Column width={2} verticalAlign="bottom">
+										<Input  fluid labelPosition='left' 
+										       type='number'>
+										       	<Label>Points</Label>
+										    	<input
+												   onChange={this.handleChange} 
+												   name="points" 
+												   value={this.props.points}/>
+										</Input>
+									</Grid.Column>
+								</Grid.Row>
+								<Grid.Row>
+									<Grid.Column width={16}>
+										<Card.Group itemsPerRow={4}>
 											{choices}
 										</Card.Group>
 									</Grid.Column>
 								</Grid.Row>
-								<Grid.Row>
-									<Button onClick={this.addChoice}>{`Add Choice to Question ${this.props.questionNumber+1}`}</Button>
-									<Button onClick={this.deleteQuestion}>Delete Question</Button>
-								</Grid.Row>
+
 							</Grid>
 							</Card.Content>
 					</Card>
