@@ -1,6 +1,6 @@
 import React from 'react';
 import {Menu, Dropdown} from 'semantic-ui-react'
-import {getUserData, logout} from '../actions/auth'
+import {logout} from '../actions/auth'
 import {NavLink} from 'react-router-dom'
 import {connect} from 'react-redux'
 
@@ -10,12 +10,6 @@ class NavBar extends React.Component {
 		return !!localStorage.getItem("jwt")
 	}
 
-	componentDidMount() {
-		if (this.loggedIn()) {
-			this.props.getUser(localStorage.getItem('jwt'))
-		}
-	}
-
 	handleLogout = () => {
 		this.props.logout()
 	}
@@ -23,38 +17,42 @@ class NavBar extends React.Component {
 	render(){
 
 		const logoPath = this.loggedIn() ? "/index" : "/login"
+
 		const loggedInMenu = (
 			<Menu.Menu position="right">
-				<Dropdown item text={this.props.username}>
+				<Dropdown item text={this.props.user.username}>
 					<Dropdown.Menu>
 						<NavLink to='/profile'><Dropdown.Item>profile</Dropdown.Item></NavLink>
 			            <NavLink to='/dashboard'><Dropdown.Item>dashboard</Dropdown.Item></NavLink>
-			            <NavLink to='/new-test'><Dropdown.Item>new test</Dropdown.Item></NavLink>
+			            {this.props.user.user_type === "teacher" ? <NavLink to='/new-assignment'><Dropdown.Item>new assignment</Dropdown.Item></NavLink> : null}
 			            <Dropdown.Item onClick={this.handleLogout}>log out</Dropdown.Item>
 					</Dropdown.Menu>
 				</Dropdown>
 			</Menu.Menu>
 		) 
 
+		const loggedOutMenu = (
+			<Menu.Menu position="right">
+				<NavLink className="item" activeClassName="" to='/signup'>sign up</NavLink>
+				<NavLink className="item" activeClassName="" to='/login'>log in</NavLink>
+			</Menu.Menu>
+		)
 
 		return (
 			<Menu>
-				<NavLink to={logoPath} className="item">Athena</NavLink>
-				{this.loggedIn() ? loggedInMenu : null}
+				<NavLink to={logoPath} className="item" activeClassName="">Athena</NavLink>
+				{this.loggedIn() ? loggedInMenu : loggedOutMenu}
 
 			</Menu>
 	)}
 }
 
 function mapStateToProps (state) {
-	return {username: state.auth.user.username}
+	return {user: state.auth.user}
 }
 
 function mapDispatchToProps (dispatch) {
 	return {
-		getUser: (jwt) => {
-			dispatch(getUserData(jwt))
-		},
 		logout: () => {
 			dispatch(logout())
 		}

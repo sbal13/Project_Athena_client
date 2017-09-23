@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux'
 import {signup} from '../actions/auth'
+import {validateInitialSignup} from '../helpers/validateSignup'
 import {Form, Segment, Button, Grid} from 'semantic-ui-react'
 import UserDetails from "./UserDetails"
 
@@ -15,6 +16,7 @@ class SignupForm extends React.Component {
 		password: "",
 		passwordConfirmation: "",
 		type: "",
+		teacherKey: "",
 		description: "",
 		subjects: []
 	}
@@ -27,7 +29,7 @@ class SignupForm extends React.Component {
 
 	handleInitialSubmit = (event) => {
 
-		if (this.initialDetailsFilled() && (this.state.password === this.state.passwordConfirmation)) {
+		if (validateInitialSignup(this.state)) {
 			this.setState({type: event.target.value})
 		}
 	}
@@ -36,14 +38,6 @@ class SignupForm extends React.Component {
 		this.props.signup(this.state, this.props.history)
 	}
 
-	initialDetailsFilled = () => {
-		return !!(this.state.username && 
-				  this.state.email && 
-				  this.state.password && 
-				  this.state.passwordConfirmation && 
-				  this.state.firstName &&
-				  this.state.lastName)
-	}
 
 	chooseSubject = (event, data) => {
 		this.setState({subjects: data.value})
@@ -56,7 +50,9 @@ class SignupForm extends React.Component {
 											 handleSubmit={this.handleSubmit} 
 											 type={this.state.type} 
 											 chooseSubject={this.chooseSubject}
-											 description={this.state.description} subjects={this.state.subjects} />
+											 subjects={this.state.subjects}
+											 teacherKey={this.state.teacherKey}
+											 description={this.state.description}/>
 
 		return (
 		<Grid centered verticalAlign="middle" columns = {3}>
@@ -112,9 +108,9 @@ class SignupForm extends React.Component {
 					   required
 					   onChange={this.handleChange}/>
 				<Button.Group  fluid>
-				    <Button color={"blue"} onClick={this.handleInitialSubmit} value="teacher">Teacher</Button>
+				    <Button color={"blue"} disabled={!validateInitialSignup(this.state)} onClick={this.handleInitialSubmit} value="teacher">Teacher</Button>
 				    <Button.Or />
-				    <Button color={"orange"} onClick={this.handleInitialSubmit} value="student">Student</Button>
+				    <Button color={"orange"} disabled={!validateInitialSignup(this.state)} onClick={this.handleInitialSubmit} value="student">Student</Button>
 				</Button.Group>
 			</Form.Group>
 		</Segment>

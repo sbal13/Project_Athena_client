@@ -1,6 +1,3 @@
-
-
-
 export const ASSIGNMENT_TYPES = [
 	"multiple choice",
 	"essay",
@@ -12,15 +9,15 @@ export const ASSIGNMENT_TYPES = [
 
 
 export const SUBJECTS = [
-		"English Literature",
-		"Math",
-		"Chemistry",
-		"Biology",
-		"Writing",
-		"Grammar",
-		"Physics",
-		"Foreign Language",
-		"History"
+		"english literature",
+		"math",
+		"chemistry",
+		"biology",
+		"writing",
+		"grammar",
+		"physics",
+		"foreign language",
+		"history"
 	].map((subject,index) => ({key: index, value: subject, text: subject}) )
 
 export const GRADES = [

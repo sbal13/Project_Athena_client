@@ -14,6 +14,7 @@ export function validateTest(state){
 function validateQuestion(question){
 	return !!question.question &&
 		   !!question.answer &&
+		   question.points > 0 &&
 		   question.choices.length > 0 &&
 		   (question.choices.filter(choice => !choice).length === 0)
 

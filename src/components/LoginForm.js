@@ -22,7 +22,6 @@ class LoginForm extends React.Component {
 	}
 
 	render(){
-		console.log(this.props)
 		return (
 		<Grid centered verticalAlign="middle" columns = {3}>
 			<Grid.Column>

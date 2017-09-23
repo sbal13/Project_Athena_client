@@ -62,15 +62,15 @@ class QuestionForm extends React.Component{
 						<Card.Content>
 							<Grid centered columns={2}>
 								<Grid.Row>
-									<Grid.Column width={14}>
+									<Grid.Column width={13}>
 										<label>Question</label>
 										<Form.TextArea onChange={this.handleChange} 
 											   name="question" 
 											   autoHeight
-											   rows={1}
+											   rows={2}
 											   value={this.props.question}/>
 									</Grid.Column>
-									<Grid.Column width={2} verticalAlign="bottom">
+									<Grid.Column width={3} verticalAlign="bottom">
 										<Input  fluid labelPosition='left' 
 										       type='number'>
 										       	<Label>Points</Label>

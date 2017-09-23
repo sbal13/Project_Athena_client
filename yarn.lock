@@ -5078,6 +5078,10 @@ rc@^1.0.1, rc@^1.1.6, rc@^1.1.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
+react-collapsible@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/react-collapsible/-/react-collapsible-2.0.3.tgz#b7228b002428a6e0a9f41646ea61ba28aacfcb00"
+
 react-dev-utils@^4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/react-dev-utils/-/react-dev-utils-4.0.1.tgz#106ae3d29f811c169d459bb9215a5933b7e11fb6"
@@ -5133,6 +5137,10 @@ react-redux@^5.0.6:
     lodash-es "^4.2.0"
     loose-envify "^1.1.0"
     prop-types "^15.5.10"
+
+react-responsive-accordion@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/react-responsive-accordion/-/react-responsive-accordion-1.0.0.tgz#e2c39ee13e18daa40d9d78486beccd27f4988cba"
 
 react-router-dom@^4.2.2:
   version "4.2.2"

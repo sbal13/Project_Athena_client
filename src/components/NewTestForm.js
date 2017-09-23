@@ -1,9 +1,8 @@
 import React from 'react';
 import QuestionForm from './QuestionForm'
-import {validateTest} from '../validators/validateTest'
+import {validateTest} from '../helpers/validateTest'
 import {connect} from 'react-redux'
-
-import {ASSIGNMENT_TYPES, GRADES, SUBJECTS} from '../constants'
+import {ASSIGNMENT_TYPES, GRADES, SUBJECTS} from '../helpers/constants'
 import {newAssignment} from '../actions/assignments'
 import {Form, Grid, Card, Segment, Button, Select, Rating, TextArea, Input, Label} from 'semantic-ui-react'
 
@@ -15,6 +14,7 @@ class NewTestForm extends React.Component {
 			points: 0,
 			choices: [""]
 		}],
+		title: "",
 		difficulty: 0,
 		subject: "",
 		description: "",
@@ -153,6 +153,12 @@ class NewTestForm extends React.Component {
 						<Card style={{position: "fixed", top: "20%"}}>
 							<Card.Header>assignment details</Card.Header>
 							<Card.Content>
+								<Input type="text"
+									   value={this.state.title}
+									   fluid
+									   name="title"
+									   onChange={this.handleAssignmentDetailChange}
+									   placeholder="title"/>
 								<TextArea name="description" 
 										  value={this.state.description} 
 										  rows={5}
