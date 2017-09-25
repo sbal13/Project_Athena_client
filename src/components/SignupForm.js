@@ -58,7 +58,8 @@ class SignupForm extends React.Component {
 		<Grid centered verticalAlign="middle" columns = {3}>
 		<Grid.Column>
 		<Segment raised>
-			<Form.Group>
+
+			<Form>
 				<Form.Input type="text"
 					   fluid
 					   name="username" 
@@ -67,6 +68,7 @@ class SignupForm extends React.Component {
 					   placeholder="username"
 					   required
 					   onChange={this.handleChange}/>
+					   
 				<Form.Input type="text"
 					   name="email"
 					   fluid 
@@ -75,6 +77,7 @@ class SignupForm extends React.Component {
 					   placeholder="email"
 					   required
 					   onChange={this.handleChange}/>
+					   
 				<Form.Input type="text"
 					   name="firstName"
 					   fluid 
@@ -83,6 +86,7 @@ class SignupForm extends React.Component {
 					   placeholder="first name"
 					   required
 					   onChange={this.handleChange}/>
+					   
 				<Form.Input type="text"
 					   name="lastName"
 					   fluid 
@@ -91,6 +95,7 @@ class SignupForm extends React.Component {
 					   placeholder="last name"
 					   required
 					   onChange={this.handleChange}/>
+					   
 				<Form.Input type="password"
 					   name="password"
 					   fluid 
@@ -99,6 +104,7 @@ class SignupForm extends React.Component {
 					   placeholder="password"
 					   required
 					   onChange={this.handleChange}/>
+					   
 				<Form.Input type="password"
 					   name="passwordConfirmation" 
 					   fluid
@@ -107,12 +113,13 @@ class SignupForm extends React.Component {
 					   placeholder="password confirmation"
 					   required
 					   onChange={this.handleChange}/>
+
 				<Button.Group  fluid>
 				    <Button color={"blue"} disabled={!validateInitialSignup(this.state)} onClick={this.handleInitialSubmit} value="teacher">Teacher</Button>
 				    <Button.Or />
 				    <Button color={"orange"} disabled={!validateInitialSignup(this.state)} onClick={this.handleInitialSubmit} value="student">Student</Button>
 				</Button.Group>
-			</Form.Group>
+			</Form>
 		</Segment>
 
 		{this.state.type ? additionalDetails : null}

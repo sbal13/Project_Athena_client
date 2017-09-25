@@ -1,27 +1,35 @@
 import React from 'react'
-import {Segment, Rating, Button} from 'semantic-ui-react'
+import {Rating, Button} from 'semantic-ui-react'
+import {connect} from 'react-redux'
 
 
-const AssignmentItem = ({details, visitAssignment}) => {
+const AssignmentItem = ({details, visitAssignment, currentUser}) => {
 
 	const {description, grade, subject, difficulty, time, timed, total_points, id} = details
+
 
 	const handleClick = (event) => {
 		visitAssignment(event.target.name)
 	}
 
 	return (
-		<Segment>
+		<div>
 			<p>Description: {description}</p>
 			<p>Grade: {grade}</p>
 			<p>Subject: {subject}</p>
 			<p>Difficulty: </p><Rating icon='star' disabled defaultRating={difficulty} maxRating={5} />
 			<p>Time: {timed ? `${time} minutes` : "untimed"}</p>
 			<p>Total points: {total_points} points</p>
-			<Button onClick={handleClick} name={id}>Try Assignment</Button>
-		</Segment>
+			<Button color="teal" onClick={handleClick} name={id}>{currentUser.user_type==="teacher" ? "View" : "Try"} Assignment</Button>
+		</div>
 	)
 }
 
+function mapStateToProps (state){
+	return {
+		currentUser: state.auth.user
+	}
+}
 
-export default AssignmentItem
+
+export default connect(mapStateToProps)(AssignmentItem)

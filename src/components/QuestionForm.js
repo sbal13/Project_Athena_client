@@ -34,15 +34,18 @@ class QuestionForm extends React.Component{
 					<Card.Header textAlign="center">{`Choice ${index+1}`}<Button floated="right" style={{background: "#820c0c", color: "white"}} size="tiny" name={`${index}-delete`} onClick={this.deleteChoice}>X</Button></Card.Header>
 
 					<Card.Content>
-						<Form.TextArea onChange={this.handleChange}
-									   autoHeight
-						      		   name={`choices-${index}`} 
-								   	   rows={2}
-						               value={choice}/>
+						<Form>
+							<Form.TextArea onChange={this.handleChange}
+										   autoHeight
+							      		   name={`choices-${index}`} 
+									   	   rows={2}
+							               value={choice}/>
+						</Form>
 						<Button toggle
 								circular
 								active = {!!(this.props.answer === choice && this.props.answer)}
 							    label="Answer"
+							    size="tiny"
 					   		    name={`${index}-set-answer`}
 					            onClick={this.changeAnswer}/>
 
@@ -64,11 +67,13 @@ class QuestionForm extends React.Component{
 								<Grid.Row>
 									<Grid.Column width={13}>
 										<label>Question</label>
-										<Form.TextArea onChange={this.handleChange} 
-											   name="question" 
-											   autoHeight
-											   rows={2}
-											   value={this.props.question}/>
+										<Form>
+											<Form.TextArea onChange={this.handleChange} 
+												   name="question" 
+												   autoHeight
+												   rows={2}
+												   value={this.props.question}/>
+										</Form>
 									</Grid.Column>
 									<Grid.Column width={3} verticalAlign="bottom">
 										<Input  fluid labelPosition='left' 

@@ -28,6 +28,7 @@ import {validateFinalSignup} from '../helpers/validateSignup'
 					   value={description} 
 					   placeholder={`Tell us a little about yourself! ${PLACEHOLDERS[type][0]} Anything at all!`}
 					   onChange={handleText}/>
+					   <br/>
 				{type === "teacher" ? <Form.Input type="text"
 							name="teacherKey"
 							value={teacherKey}
@@ -35,6 +36,7 @@ import {validateFinalSignup} from '../helpers/validateSignup'
 							placeholder="Enter a teacher passcode. Students will use this to add you as a teacher."
 							onChange={handleText}/>
 							: null}
+							<br/>
 				<Dropdown onChange={chooseSubject} 
 						  closeOnChange={true} 
 						  placeholder={PLACEHOLDERS[type][1]} 

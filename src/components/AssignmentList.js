@@ -1,5 +1,5 @@
 import React from 'react'
-import {Accordion, Label} from 'semantic-ui-react';
+import {Accordion} from 'semantic-ui-react';
 import AssignmentItem from './AssignmentItem'
 
 
@@ -14,12 +14,12 @@ const AssignmentList = ({assignments, history})=>{
 	const assignmentComponents = assignments.map((assignment, index) => {
 		return {
 			key: `${index}`,
-			title: <Label>{assignment.details.title}</Label>,
+			title: assignment.details.title,
 			content: <AssignmentItem details={assignment.details} visitAssignment={visitAssignment} />
 		}
 	})
 	return(
-		<Accordion panels={assignmentComponents}/>
+		<Accordion fluid styled panels={assignmentComponents}/>
 	)
 }
 

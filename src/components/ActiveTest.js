@@ -20,13 +20,25 @@ class ActiveTest extends React.Component {
 
 	startAssignment = () => {
 		const emptyArray = this.props.assignment.questions.map(q => "")
+
+		const shouldStartTimer = this.isTimed() && this.isStudent() ? setInterval(this.tick, 1000) : null
+
 		this.setState({
-			timer: setInterval(this.tick, 1000), 
+			timer: shouldStartTimer, 
 			started: true, 
-			timeRemaining: this.props.assignment.details.time,
+			timeRemaining: this.props.assignment.details.time*60,
 			selectedAnswers: emptyArray
 		})
 	}
+
+	isStudent = ()=>{
+		return this.props.currentUser.user_type === "student"
+	}
+
+	isTimed = ()=>{
+		return this.props.assignment.details.timed
+	}
+
 
 	finalize = () => {
 		clearInterval(this.state.timer)
@@ -72,6 +84,8 @@ class ActiveTest extends React.Component {
 		this.props.history.push('/profile', this.props.assignment.details.id)
 	}
 
+
+
 	componentWillUnmount(){
 		clearInterval(this.state.timer)
 	}
@@ -80,12 +94,11 @@ class ActiveTest extends React.Component {
 
 		const {details, questions} = this.props.assignment
 
-		console.log(this.state.selectedAnswers)
+
 		return (
 		<div>
-			<Grid  centered columns={2}>
+			<Grid  centered columns={2} style={{top: "10%"}} >
 				<Grid.Column width={10}>
-
 					{this.state.started ? questions.map((question, index)=> {
 							return <ActiveQuestion key={index} 
 												   questionNum={index} 
@@ -95,15 +108,23 @@ class ActiveTest extends React.Component {
 												   over={this.state.over}/>
 							})
 						: null }
-
 				</Grid.Column>
 				<Grid.Column width={4}>
 					<Card.Group style={{position: "fixed", top: "10%"}}>
-						{!details ? <Card/> : <ActiveAssignmentDetails details={details} seeResults = {this.seeResults} openModal={this.openModal} submit={this.submitAssignment} over={this.state.over} start={this.startAssignment} started={this.state.started}/>}
-						{this.state.started ? <Timer timeRemaining={this.state.timeRemaining}/>: null}
+						{!details ? <Card/> : <ActiveAssignmentDetails details={details} 
+																	   seeResults = {this.seeResults} 
+																	   openModal={this.openModal} 
+																	   submit={this.submitAssignment} 
+																	   over={this.state.over} 
+																	   start={this.startAssignment} 
+																	   started={this.state.started}
+																	   readOnly={!this.isStudent()}/>}
+
+						{this.state.started && this.isTimed() && this.isStudent() ? <Timer timeRemaining={this.state.timeRemaining}/> : null}
 					</Card.Group>
 				</Grid.Column>
 			</Grid>
+
 			<Modal open={this.state.open}
 				   closeOnEscape={false}
 				   closeOnRootNodeClick={false}
@@ -115,15 +136,19 @@ class ActiveTest extends React.Component {
 					<p>Are you sure you want to submit?</p>
 				</Modal.Content>
 				<Modal.Actions>
-					<Button positive onClick={this.submitAssignment} labelPosition='right' icon='checkmark' content='Submit' />
-					<Button negative onClick={this.closeModal}>i'm not done!</Button>
+					<Button positive onClick={this.submitAssignment} labelPosition='right' icon='checkmark' content='submit assignment' />
+					<Button negative onClick={this.closeModal} labelPosition='right' icon='remove' content='back to assignment' />
 				</Modal.Actions>
 			</Modal>
 		</div>
 		)
 	}
 }
-
+function mapStateToProps (state){
+	return {
+		currentUser: state.auth.user
+	}
+}
 
 function mapDispatchToProps(dispatch){
 	return {
@@ -133,4 +158,4 @@ function mapDispatchToProps(dispatch){
 	}
 }
 
-export default connect(null, mapDispatchToProps)(ActiveTest)
+export default connect(mapStateToProps, mapDispatchToProps)(ActiveTest)

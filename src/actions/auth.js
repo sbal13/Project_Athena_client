@@ -74,7 +74,8 @@ export function getUserData(jwt){
     }
 }
 
-export function logout() {
+export function logout(history) {
+    history.push('/login')
     return {type: "LOG_OUT"}
   }
 

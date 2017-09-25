@@ -6,8 +6,12 @@ import ActiveTest from '../components/ActiveTest'
 class CompleteAssignmentPage extends React.Component{
 
 	componentDidMount(){
-		const assignmentId = this.props.location.pathname.split("/")[2]
-		this.props.getAssignment(assignmentId)
+		if(!localStorage.getItem('jwt')){
+			this.props.history.push('/login')
+		} else {
+			const assignmentId = this.props.location.pathname.split("/")[2]
+			this.props.getAssignment(assignmentId)
+		}
 	}
 
 	render(){

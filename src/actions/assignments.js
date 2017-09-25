@@ -21,7 +21,7 @@ export function newAssignment(assignment, history) {
       .then(json => {
         if (json.success) {
           dispatch({type: "CREATE_NEW_ASSIGNMENT", payload: json})
-          history.push('/profile', json.success)
+          history.push(`/user/${json.assignment.creator.id}`, json.success)
         } 
       })
     }
@@ -83,6 +83,22 @@ export function submitAssignment(answers, assignmentId){
 }
 
 
-export function deleteAssignment(){
+export function getTeacherAssignments(id){
+    return function(dispatch){
+    const url = `http://localhost:3000/api/v1/users/${id}/assignments`
 
+    return fetch(url)
+    .then(res => res.json())
+    .then(json => {
+      if (json.success){
+        dispatch({type: "GET_TEACHER_ASSIGNMENTS", payload: json})
+      }
+    })
+  }
+}
+
+export function clearTeacherData(){
+  return function(dispatch){
+    dispatch({type: "CLEAR_TEACHER_DATA"})
+  }
 }

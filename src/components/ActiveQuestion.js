@@ -1,11 +1,15 @@
 import React from 'react'
-import {Card, Button, Label} from 'semantic-ui-react'
+import {Card, Button} from 'semantic-ui-react'
 
 const ActiveQuestion = ({questionDetails, ended, questionNum, selectedAnswer, over, selectAnswer})=>{
 
 
 	const handleSelect = (event) => {
-		selectAnswer(questionNum, event.target.value)
+		if (event.target.value === selectedAnswer) {
+			selectAnswer(questionNum, "")
+		} else {
+			selectAnswer(questionNum, event.target.value)
+		}
 	}
 
 	const {question, choices, point_value} = questionDetails
@@ -17,8 +21,8 @@ const ActiveQuestion = ({questionDetails, ended, questionNum, selectedAnswer, ov
 
 	return (
 		<Card fluid>
-			<Card.Header>
-				<h3>{`Question ${questionNum + 1} - (${point_value} points)`}</h3>
+			<Card.Header >
+				<h2>{`${questionNum + 1}.`}</h2>
 				
 			</Card.Header>
 			<Card.Content>
@@ -26,6 +30,7 @@ const ActiveQuestion = ({questionDetails, ended, questionNum, selectedAnswer, ov
 				{choiceComponents}
 			</Card.Content>
 		</Card>
+
 	)
 }
 
