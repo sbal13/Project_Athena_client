@@ -146,7 +146,7 @@ class ActiveTest extends React.Component {
 }
 function mapStateToProps (state){
 	return {
-		currentUser: state.auth.user
+		currentUser: state.auth.currentUser
 	}
 }
 

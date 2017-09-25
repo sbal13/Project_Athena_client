@@ -53,6 +53,8 @@ export function signup(userData, history) {
 }
 
 export function getUserData(jwt){
+
+  
     return function(dispatch) {
       const url = 'http://localhost:3000/api/v1/getcurrentuser'
 
@@ -68,7 +70,7 @@ export function getUserData(jwt){
       .then(res => res.json())
       .then(json => {
         if (json.success) {
-          dispatch({type: "GET_USER", payload: json})
+          dispatch({type: "GET_CURRENT_USER", payload: json})
         }
       })
     }

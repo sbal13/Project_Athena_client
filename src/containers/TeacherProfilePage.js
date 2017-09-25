@@ -12,9 +12,10 @@ class TeacherProfilePage extends React.Component {
 		this.props.getTeacherAssignments(this.props.teacher.id)
 	}
 
-	componentWillUpdate(nextProps){
-		this.props.getTeacherAssignments(nextProps.teacher.id)
+	shouldComponentUpdate(nextProps){
+		return this.props.teacher.id !== nextProps.teacher.id || this.props.teacherAssignments.length === 0
 	}
+
 
 	render(){
 		const {description, username, email, subjects,first_name, last_name} = this.props.teacher
@@ -29,8 +30,10 @@ class TeacherProfilePage extends React.Component {
 							<p>Email: {email}</p>
 
 							<h4>About me:</h4>
-							<p>{description}</p>
-							<p>Subjects: {subjects.join(", ")}</p>
+							<Segment>
+								<p>{description}</p>
+								<p>I teach: {subjects.join(", ")}</p>
+							</Segment>
 						</Card.Content>
 					</Card>
 				</Grid.Column>

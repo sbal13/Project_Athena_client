@@ -11,6 +11,19 @@ class ProfilePage extends React.Component {
 		const userId = this.props.location.pathname.split("/")[2]
 		this.props.getUser(userId)
 	}
+
+	componentWillUpdate(nextProps){
+		const userId = this.props.location.pathname.split("/")[2]
+		this.props.getUser(userId)
+	}
+
+	shouldComponentUpdate(nextProps){
+		return this.props.user.id !== nextProps.user.id
+	}
+
+
+
+
 	render(){
 		let profileType = null;
 		if (this.props.user.user_type === "teacher") {

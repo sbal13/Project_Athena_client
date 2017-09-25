@@ -97,6 +97,62 @@ export function getTeacherAssignments(id){
   }
 }
 
+export function getStudentAssignments(id){
+    return function(dispatch){
+    const url = `http://localhost:3000/api/v1/users/${id}/assignedassignments`
+
+    return fetch(url)
+    .then(res => res.json())
+    .then(json => {
+      if (json.success){
+        dispatch({type: "GET_STUDENT_ASSIGNMENTS", payload: json})
+      }
+    })
+  }
+}
+
+
+export function assign(studentId, assignmentId) {
+    return function(dispatch){
+      const url = `http://localhost:3000/api/v1/assignments/assign`
+      const body = JSON.stringify({student_id: studentId, assignment_id: assignmentId})
+      const jwtToken = localStorage.getItem("jwt")
+
+
+       const headers = {
+          method: 'post',
+          body: body,
+          headers: {
+            "Authorization":`Bearer ${jwtToken}`,
+            "Content-Type":"application/json",
+            "Accept":"application/json"
+          }
+        }
+
+      fetch(url, headers)
+      .then(res => res.json())
+      .then(json => {
+        if (json.success){
+          dispatch({type: "ASSIGN_ASSIGNMENTS", payload: json})
+        }
+      })
+    }
+}
+
+export function getAllIssuedAssignments(teacherId){
+    return function(dispatch){
+    const url = `http://localhost:3000/api/v1/users/${teacherId}/studentsassignments`
+
+    return fetch(url)
+    .then(res => res.json())
+    .then(json => {
+      if (json.success){
+        dispatch({type: "GET_ALL_STUDENT_ASSIGNMENTS", payload: json})
+      }
+    })
+  }
+}
+
 export function clearTeacherData(){
   return function(dispatch){
     dispatch({type: "CLEAR_TEACHER_DATA"})

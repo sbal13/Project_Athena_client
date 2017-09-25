@@ -27,7 +27,7 @@ const AssignmentItem = ({details, visitAssignment, currentUser}) => {
 
 function mapStateToProps (state){
 	return {
-		currentUser: state.auth.user
+		currentUser: state.auth.currentUser
 	}
 }
 

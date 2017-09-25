@@ -42,3 +42,32 @@ export function getUser(id){
     })
   }
 }
+
+export function getUserTeachers(studentId){
+  return function(dispatch){
+    const url = `http://localhost:3000/api/v1/users/${studentId}/teachers`
+    
+    return fetch(url)
+    .then(res => res.json())
+    .then(json => {
+      if (json.success){
+        dispatch({type: "GET_USER_TEACHERS", payload: json})
+      }
+    })
+  }
+}
+
+export function getUserStudents(teacherId){
+  return function(dispatch){
+    const url = `http://localhost:3000/api/v1/users/${teacherId}/students`
+    
+    return fetch(url)
+    .then(res => res.json())
+    .then(json => {
+      if (json.success){
+        dispatch({type: "GET_USER_STUDENTS", payload: json})
+      }
+
+    })
+  }
+}

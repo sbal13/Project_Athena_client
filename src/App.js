@@ -7,6 +7,7 @@ import LoginPage from './containers/LoginPage'
 import NewTestPage from './containers/NewTestPage'
 import ProfilePage from './containers/ProfilePage'
 import CompleteAssignmentPage from './containers/CompleteAssignmentPage'
+import DashboardPage from './containers/DashboardPage'
 import IndexPage from './containers/IndexPage'
 import {getUserData} from './actions/auth'
 import {connect} from 'react-redux'
@@ -37,6 +38,7 @@ class App extends Component {
             <Route exact path="/index" component={IndexPage}/>
             <Route exact path="/signup" component={SignupPage}/>
             <Route exact path="/login" component={LoginPage}/>
+            <Route exact path="/dashboard" component={DashboardPage}/>
             <Route exact path="/new-assignment" component={NewTestPage}/>
             <Route path="/assignment/:id" component={CompleteAssignmentPage}/>
             <Route path="/user/:id" component={ProfilePage}/>

@@ -96,7 +96,7 @@ class NavBar extends React.Component {
 }
 
 function mapStateToProps (state) {
-	return {user: state.auth.user}
+	return {user: state.auth.currentUser}
 }
 
 function mapDispatchToProps (dispatch) {
