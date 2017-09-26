@@ -83,7 +83,7 @@ class StudentDash extends React.Component{
 						<Grid.Row >
 							<Grid.Column>
 								<Card fluid style={{height: "400px", overflow:"auto"}}>
-									<AssignmentTable assignments={this.state.displayedTeacherId ? this.state.sortedByTeacher: this.props.assignments} isStudent={true} goToAssignment={this.goToAssignment}/>
+									<AssignmentTable users={this.props.teachers} assignments={this.state.displayedTeacherId ? this.state.sortedByTeacher: this.props.assignments} isStudent={true} goToAssignment={this.goToAssignment}/>
 								</Card>
 							</Grid.Column>
 						</Grid.Row>

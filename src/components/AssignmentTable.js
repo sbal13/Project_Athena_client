@@ -3,12 +3,13 @@ import {Table, Button} from 'semantic-ui-react'
 import Moment from 'react-moment';
 
 
-const AssignmentTable = ({assignments, isStudent, goToAssignment}) =>{
+const AssignmentTable = ({assignments, isStudent, users, goToAssignment}) =>{
 
 	return(
 			 <Table celled padded>
 			    <Table.Header>
 			      <Table.Row>
+			        <Table.HeaderCell>{isStudent ? "Teacher" : "User"}</Table.HeaderCell>
 			        <Table.HeaderCell>Title</Table.HeaderCell>
 			        <Table.HeaderCell>Subject</Table.HeaderCell>
 			        <Table.HeaderCell>Type</Table.HeaderCell>
@@ -24,8 +25,16 @@ const AssignmentTable = ({assignments, isStudent, goToAssignment}) =>{
 			    		const percentage = Math.round(details.final_score/assignment_details.total_points*100)
 			    		const score = details.status === "Graded" ? `${details.final_score}/${assignment_details.total_points} (${percentage}%)` : "Ungraded"
 			    		const goToAssignmentButton = <Button onClick={goToAssignment} name={assignment_details.id}>do assignment</Button>
+			    		let username;
+
+			    		if (isStudent){
+			    			username = users.find(user => user.id == assignment_details.teacher_id).username
+			    		} else {
+			    			username = users.find(user => user.id == details.student_id).username
+			    		}
 				    	return(
 					    	<Table.Row key={index}>
+						        <Table.Cell>{username}</Table.Cell>
 						        <Table.Cell>{assignment_details.title}</Table.Cell>
 						        <Table.Cell>{assignment_details.subject}</Table.Cell>
 						        <Table.Cell>{assignment_details.assignment_type}</Table.Cell>
