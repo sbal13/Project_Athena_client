@@ -32,7 +32,7 @@ class StudentDash extends React.Component{
 
 		const displayedTeacher = this.props.teachers.find(teacher => teacher.id === this.state.displayedTeacherId) || {first_name: "", last_name: "", subjects:[]}
 
-		const assignmentsToSort = this.state.sortedByTeacher.length === 0 ? this.props.assignments : this.state.sortedByTeacher
+		const assignmentsToSort = this.state.displayedTeacherId ? this.state.sortedByTeacher : this.props.assignments
 
 		const pendingAssignments = assignmentsToSort.length > 0 ? assignmentsToSort.filter(assignment => assignment.issued_assignments.details.status === "Pending").length : 0
 

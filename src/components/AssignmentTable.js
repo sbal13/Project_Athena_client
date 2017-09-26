@@ -28,9 +28,9 @@ const AssignmentTable = ({assignments, isStudent, users, goToAssignment}) =>{
 			    		let username;
 
 			    		if (isStudent){
-			    			username = users.find(user => user.id == assignment_details.teacher_id).username
+			    			username = users.find(user => user.id === assignment_details.teacher_id).username
 			    		} else {
-			    			username = users.find(user => user.id == details.student_id).username
+			    			username = users.find(user => user.id === details.student_id).username
 			    		}
 				    	return(
 					    	<Table.Row key={index}>

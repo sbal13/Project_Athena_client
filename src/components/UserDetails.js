@@ -2,6 +2,8 @@ import {Form, Segment, Button, Dropdown} from 'semantic-ui-react'
 import {PLACEHOLDERS, SUBJECTS} from '../helpers/constants'
 import React from 'react'
 import {validateFinalSignup} from '../helpers/validateSignup'
+import AlertContainer from 'react-alert'
+import {alertOptions} from '../helpers/AlertOptions'
 
 
 
@@ -13,8 +15,13 @@ import {validateFinalSignup} from '../helpers/validateSignup'
  	}
 
  	const handleSubmit = () => {
- 		if (!!description) {
+ 		const validator = validateFinalSignup(description, subjects, type, teacherKey)
+ 		if (validator.length === 0) {
  			handleFinalSubmit()
+ 		} else {
+ 			validator.forEach( message =>{
+ 				this.msg.error(message)
+ 			})
  		}
  	}
 
@@ -45,8 +52,11 @@ import {validateFinalSignup} from '../helpers/validateSignup'
 						  search 
 						  selection 
 						  options={SUBJECTS}/>
-				<Button color="teal" disabled={!validateFinalSignup(description, subjects, type, teacherKey)}fluid onClick={handleSubmit}>sign up</Button>
+				<Button color="teal" fluid onClick={handleSubmit}>sign up</Button>
 			</Form.Group>
+
+			<AlertContainer ref={a => this.msg = a} {...alertOptions} />
+
 		</Segment>
  	)
  }
