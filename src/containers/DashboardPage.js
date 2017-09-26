@@ -7,11 +7,10 @@ class DashboardPage extends React.Component{
 
 	render(){
 		let dashType;
-
 		 if(this.props.currentUser.user_type === "teacher") {
-		 	dashType = <TeacherDash teacher = {this.props.currentUser}/>
+		 	dashType = <TeacherDash teacher = {this.props.currentUser} history={this.props.history}/>
 		 } else if(this.props.currentUser.user_type === "student") {
-		 	dashType = <StudentDash student = {this.props.currentUser}/>
+		 	dashType = <StudentDash student = {this.props.currentUser} history={this.props.history}/>
 		 }
 
 		return (

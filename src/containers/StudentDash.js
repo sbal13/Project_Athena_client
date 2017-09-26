@@ -3,7 +3,7 @@ import {connect} from 'react-redux'
 import {getUserTeachers} from '../actions/users'
 import {getStudentAssignments} from '../actions/assignments'
 import {Grid, Card, Table} from 'semantic-ui-react'
-import DashUserList from '../components/DashUserList'
+import StudentDashControls from '../components/StudentDashControls'
 import AssignmentTable from '../components/AssignmentTable'
 
 class StudentDash extends React.Component{
@@ -17,18 +17,25 @@ class StudentDash extends React.Component{
 		this.props.getDashboardInfo(this.props.student.id)
 	}
 
-	openDetails = (teacherId) => {
+	openDetails = (event, data) => {
+		const teacherId = data.value
 		const filteredAssignments = this.props.assignments.filter(assignment => assignment.issued_assignments.assignment_details.teacher_id === teacherId)
 		this.setState({displayedTeacherId: teacherId, sortedByTeacher: filteredAssignments})
 	}
 
-	resetDetails = () => {
-		this.setState({displayedTeacherId: null, sortedByTeacher: []})
+	goToAssignment = (event) => {
+		this.props.history.push(`/assignment/${event.target.name}`)
 	}
+
 
 	render(){
 
 		const displayedTeacher = this.props.teachers.find(teacher => teacher.id === this.state.displayedTeacherId) || {first_name: "", last_name: "", subjects:[]}
+
+		const assignmentsToSort = this.state.sortedByTeacher.length === 0 ? this.props.assignments : this.state.sortedByTeacher
+
+		const pendingAssignments = assignmentsToSort.length > 0 ? assignmentsToSort.filter(assignment => assignment.issued_assignments.details.status === "Pending").length : 0
+
 
 		const teacherDetails = (
 			 <Table celled padded>
@@ -47,7 +54,7 @@ class StudentDash extends React.Component{
 				        <Table.Cell>{`${displayedTeacher.first_name} ${displayedTeacher.last_name}`}</Table.Cell>
 				        <Table.Cell>{displayedTeacher.email}</Table.Cell>
 				        <Table.Cell>{displayedTeacher.subjects.join(", ")}</Table.Cell>
-				        <Table.Cell></Table.Cell>
+				        <Table.Cell>{pendingAssignments}</Table.Cell>
 			    	</Table.Row>
 			    </Table.Body>
 			</Table>
@@ -60,7 +67,7 @@ class StudentDash extends React.Component{
 					<Card fluid>
 						<Card.Header>your teachers</Card.Header>
 						<Card.Content>
-							<DashUserList users={this.props.teachers} resetDetails={this.resetDetails} openDetails={this.openDetails}/>
+							<StudentDashControls teachers={this.props.teachers} openDetails={this.openDetails}/>
 						</Card.Content>
 					</Card>
 				</Grid.Column>
@@ -76,7 +83,7 @@ class StudentDash extends React.Component{
 						<Grid.Row >
 							<Grid.Column>
 								<Card fluid style={{height: "400px", overflow:"auto"}}>
-									<AssignmentTable assignments={this.state.displayedTeacherId ? this.state.sortedByTeacher: this.props.assignments}/>
+									<AssignmentTable assignments={this.state.displayedTeacherId ? this.state.sortedByTeacher: this.props.assignments} isStudent={true} goToAssignment={this.goToAssignment}/>
 								</Card>
 							</Grid.Column>
 						</Grid.Row>

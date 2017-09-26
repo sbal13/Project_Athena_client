@@ -81,7 +81,7 @@ class ActiveTest extends React.Component {
 	}
 
 	seeResults = () => {
-		this.props.history.push('/profile', this.props.assignment.details.id)
+		this.props.history.push('/dashboard', this.props.assignment.details.id)
 	}
 
 

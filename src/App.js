@@ -39,7 +39,7 @@ class App extends Component {
             <Route exact path="/signup" component={SignupPage}/>
             <Route exact path="/login" component={LoginPage}/>
             <Route exact path="/dashboard" component={DashboardPage}/>
-            <Route exact path="/new-assignment" component={NewTestPage}/>
+            <Route exact path="/new-assignment" render={(props) => <NewTestPage {...props} currentUser={this.props.currentUser}/>}/>
             <Route path="/assignment/:id" component={CompleteAssignmentPage}/>
             <Route path="/user/:id" component={ProfilePage}/>
           </Grid.Column>
@@ -51,6 +51,7 @@ class App extends Component {
 function mapStateToProps (state) {
   return {
     loggedIn: state.auth.loggedIn,
+    currentUser: state.auth.currentUser,
     allAssignments: state.assignment.allAssignments
     }
 }

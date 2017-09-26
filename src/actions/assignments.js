@@ -112,10 +112,10 @@ export function getStudentAssignments(id){
 }
 
 
-export function assign(studentId, assignmentId) {
+export function assign(studentId, assignmentId, dueDate) {
     return function(dispatch){
       const url = `http://localhost:3000/api/v1/assignments/assign`
-      const body = JSON.stringify({student_id: studentId, assignment_id: assignmentId})
+      const body = JSON.stringify({student_id: studentId, assignment_id: assignmentId, due_date: dueDate})
       const jwtToken = localStorage.getItem("jwt")
 
 
@@ -133,7 +133,7 @@ export function assign(studentId, assignmentId) {
       .then(res => res.json())
       .then(json => {
         if (json.success){
-          dispatch({type: "ASSIGN_ASSIGNMENTS", payload: json})
+          dispatch({type: "ASSIGN_ASSIGNMENT", payload: json})
         }
       })
     }

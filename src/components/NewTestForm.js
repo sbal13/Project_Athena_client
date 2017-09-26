@@ -109,11 +109,7 @@ class NewTestForm extends React.Component {
 
 
 	createAssignment = () => {
-		if (this.props.user.type === "student"){
-			alert("Hey! You're not a teacher!")
-		} else {
-			this.props.create(this.state, this.props.history)
-		}
+		this.props.create(this.state, this.props.history)
 	}
 
 	toggleTime = () => {

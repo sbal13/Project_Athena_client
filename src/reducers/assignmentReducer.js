@@ -11,6 +11,8 @@ export default function assignmentReducer (state={currentAssignment: {},
 			return Object.assign({}, state, currentAssignment)
 		case "CREATE_NEW_ASSIGNMENT": 
 			return Object.assign({}, state, {allAssignments: [...state.allAssignments, action.payload.assignment]})
+		case "ASSIGN_ASSIGNMENT":
+			return Object.assign({}, state, {allStudentAssignments: [...state.allStudentAssignments, action.payload.assignment]})
 		case "GET_ALL_ASSIGNMENTS":
 			return Object.assign({}, state, {allAssignments: action.payload.assignments})
 		case "GET_TEACHER_ASSIGNMENTS":
