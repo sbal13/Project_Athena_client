@@ -19,7 +19,7 @@ class App extends Component {
 
 
   componentDidMount() {
-    if(!!localStorage.getItem("jwt") && !this.props.username){
+    if(!!localStorage.getItem("jwt") && !this.props.loggedIn){
       this.props.getUser(localStorage.getItem('jwt'))
     }
   }

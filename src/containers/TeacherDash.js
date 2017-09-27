@@ -6,6 +6,8 @@ import {Grid, Card, Table} from 'semantic-ui-react'
 import TeacherDashControls from '../components/TeacherDashControls'
 import AssignmentTable from '../components/AssignmentTable'
 import moment from 'moment';
+import {alertOptions} from '../helpers/AlertOptions'
+import AlertContainer from 'react-alert'
 
 
 
@@ -38,7 +40,17 @@ class TeacherDash extends React.Component{
 	}
 
 	assignAssignment = () => {
-		this.props.assign(this.state.chosenStudentId, this.state.chosenAssignmentId, this.state.date)
+		const {chosenStudentId, chosenAssignmentId} = this.state
+		if (chosenAssignmentId && chosenStudentId){
+			this.props.assign(this.state.chosenStudentId, this.state.chosenAssignmentId, this.state.date)
+			.then(res => {
+				if (res){
+					this.msg.error(res)	
+				}
+			})
+		} else {
+			this.msg.error("Please enter a student and an assignment!")	
+		}
 	}
 
 	handleDateChange = (date) =>{
@@ -110,6 +122,7 @@ class TeacherDash extends React.Component{
 						</Grid.Row>
 					</Grid>
 				</Grid.Column>
+				<AlertContainer ref={a => this.msg = a} {...alertOptions} />
 			</Grid>
 	)}
 }
@@ -133,7 +146,7 @@ function mapDispatchToProps(dispatch){
 		},
 
 		assign: (studentId, assignmentId, dueDate) => {
-			dispatch(assign(studentId, assignmentId, dueDate))
+			return dispatch(assign(studentId, assignmentId, dueDate))
 		}
 	}
 }

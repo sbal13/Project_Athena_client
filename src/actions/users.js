@@ -29,7 +29,7 @@ export function addTeacher(teacherKey){
 }
 
 
-export function getUser(id){
+export function getUser(id, reload){
   return function(dispatch){
     const url = `http://localhost:3000/api/v1/users/${id}`
     

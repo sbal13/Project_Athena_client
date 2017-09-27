@@ -45,7 +45,7 @@ export function getAssignment(id){
   return function(dispatch){
     const url = `http://localhost:3000/api/v1/assignments/${id}`
 
-    fetch(url)
+    return fetch(url)
     .then(res => res.json())
     .then(json => {
       if (json.success){
@@ -72,7 +72,7 @@ export function submitAssignment(answers, assignmentId){
       }
     }
 
-    fetch(url, headers)
+    return fetch(url, headers)
     .then(res => res.json())
     .then(json => {
       if (json.success){
@@ -129,11 +129,13 @@ export function assign(studentId, assignmentId, dueDate) {
           }
         }
 
-      fetch(url, headers)
+      return fetch(url, headers)
       .then(res => res.json())
       .then(json => {
         if (json.success){
           dispatch({type: "ASSIGN_ASSIGNMENT", payload: json})
+        } else {
+          return json.failure
         }
       })
     }

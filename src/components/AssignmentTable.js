@@ -17,6 +17,8 @@ const AssignmentTable = ({assignments, isStudent, users, goToAssignment}) =>{
 			        <Table.HeaderCell>Due Date</Table.HeaderCell>
 			        <Table.HeaderCell>Status</Table.HeaderCell>
 			        <Table.HeaderCell>Final Score</Table.HeaderCell>
+			        <Table.HeaderCell>Actions</Table.HeaderCell>
+
 			      </Table.Row>
 			    </Table.Header>	
 			    <Table.Body>
@@ -24,7 +26,12 @@ const AssignmentTable = ({assignments, isStudent, users, goToAssignment}) =>{
 			    		const {assignment_details, details} = assignment.issued_assignments
 			    		const percentage = Math.round(details.final_score/assignment_details.total_points*100)
 			    		const score = details.status === "Graded" ? `${details.final_score}/${assignment_details.total_points} (${percentage}%)` : "Ungraded"
-			    		const goToAssignmentButton = <Button onClick={goToAssignment} name={assignment_details.id}>do assignment</Button>
+			    		
+
+			    		const viewButton =  <Button name={assignment_details.id}>view</Button>
+
+			    		const teacherActionsButton = details.status === "Submitted" ? <Button name={assignment_details.id}>finish grading</Button> : viewButton
+			    		const studentActionsButton = details.status === "Pending" ? <Button onClick={goToAssignment} name={assignment_details.id}>do assignment</Button> : viewButton 
 			    		let username;
 
 			    		if (isStudent){
@@ -40,8 +47,9 @@ const AssignmentTable = ({assignments, isStudent, users, goToAssignment}) =>{
 						        <Table.Cell>{assignment_details.assignment_type}</Table.Cell>
 						        <Table.Cell><Moment format="MM/DD/YYYY (dddd)" date={details.assigned_date}/></Table.Cell>
 						        <Table.Cell><Moment format="MM/DD/YYYY (dddd)" date={details.due_date}/></Table.Cell>
-						        <Table.Cell>{details.status==="Pending" && isStudent ? goToAssignmentButton : details.status}</Table.Cell>
+						        <Table.Cell>{details.status}</Table.Cell>
 						        <Table.Cell>{score}</Table.Cell>
+						        <Table.Cell>{isStudent ? studentActionsButton : teacherActionsButton}</Table.Cell>
 					    	</Table.Row>
 					)})}
 			    </Table.Body>

@@ -54,7 +54,7 @@ export function validateFinalSignup(description, subjects, type, teacherKey){
 	if (!description){
 		messages.push("Please tell us about yourself")
 	}
-	if (subjects.length == 0){
+	if (subjects.length === 0){
 		messages.push("Please let us know what subjects you teach")
 	}
 

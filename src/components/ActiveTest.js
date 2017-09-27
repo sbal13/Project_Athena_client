@@ -4,7 +4,9 @@ import ActiveQuestion from './ActiveQuestion'
 import ActiveAssignmentDetails from './ActiveAssignmentDetails'
 import Timer from './Timer'
 import {connect} from 'react-redux'
-import {submitAssignment} from '../actions/assignments'
+import {submitAssignment, getStudentAssignments} from '../actions/assignments'
+import {alertOptions} from '../helpers/AlertOptions'
+import AlertContainer from 'react-alert'
 
 class ActiveTest extends React.Component {
 
@@ -15,20 +17,29 @@ class ActiveTest extends React.Component {
 		timeRemaining: 0,
 		timer: null,
 		selectedAnswers: [],
-		open: false
+		open: false,
+		loaded: false
 	}
 
 	startAssignment = () => {
 		const emptyArray = this.props.assignment.questions.map(q => "")
 
-		const shouldStartTimer = this.isTimed() && this.isStudent() ? setInterval(this.tick, 1000) : null
-
-		this.setState({
-			timer: shouldStartTimer, 
-			started: true, 
-			timeRemaining: this.props.assignment.details.time*60,
-			selectedAnswers: emptyArray
+		const completedAssignments = this.props.issuedAssignments.filter(assignment => assignment.issued_assignments.details.status === "Graded" || assignment.issued_assignments.details.status === "Submitted")
+		const found = !!completedAssignments.find(assignment => {
+			return assignment.issued_assignments.assignment_details.id === this.props.assignment.details.id
 		})
+
+		if (found){
+			this.msg.info("You've already completed this assignment!")
+		} else {
+			const shouldStartTimer = this.isTimed() && this.isStudent() ? setInterval(this.tick, 1000) : null
+			this.setState({
+				timer: shouldStartTimer, 
+				started: true, 
+				timeRemaining: this.props.assignment.details.time*60,
+				selectedAnswers: emptyArray
+			})
+		}
 	}
 
 	isStudent = ()=>{
@@ -62,8 +73,6 @@ class ActiveTest extends React.Component {
 	}
 
 	selectAnswer = (questionNum, choice) => {
-		console.log("Question: ", questionNum)
-		console.log("Selected: ", choice )
 
 		const newSelected = this.state.selectedAnswers.slice()
 
@@ -84,7 +93,19 @@ class ActiveTest extends React.Component {
 		this.props.history.push('/dashboard', this.props.assignment.details.id)
 	}
 
+	componentWillUpdate(nextProps){
+		if (this.props.currentUser.id !== nextProps.currentUser.id){
+			this.props.getAssignments(nextProps.currentUser.id)
+			.then(res => this.setState({loaded: true}))
+		}
+	}	
 
+	componentWillMount(){
+		if (this.props.currentUser.id){
+			this.props.getAssignments(this.props.currentUser.id)
+			.then(res => this.setState({loaded: true}))
+		}
+	}
 
 	componentWillUnmount(){
 		clearInterval(this.state.timer)
@@ -93,8 +114,7 @@ class ActiveTest extends React.Component {
 	render(){
 
 		const {details, questions} = this.props.assignment
-
-
+		console.log("Rendering...")
 		return (
 		<div>
 			<Grid  centered columns={2} style={{top: "10%"}} >
@@ -118,7 +138,8 @@ class ActiveTest extends React.Component {
 																	   over={this.state.over} 
 																	   start={this.startAssignment} 
 																	   started={this.state.started}
-																	   readOnly={!this.isStudent()}/>}
+																	   readOnly={!this.isStudent()}
+																	   loaded={this.state.loaded}/>}
 
 						{this.state.started && this.isTimed() && this.isStudent() ? <Timer timeRemaining={this.state.timeRemaining}/> : null}
 					</Card.Group>
@@ -140,13 +161,16 @@ class ActiveTest extends React.Component {
 					<Button negative onClick={this.closeModal} labelPosition='right' icon='remove' content='back to assignment' />
 				</Modal.Actions>
 			</Modal>
+			<AlertContainer ref={a => this.msg = a} {...alertOptions} />
+
 		</div>
 		)
 	}
 }
 function mapStateToProps (state){
 	return {
-		currentUser: state.auth.currentUser
+		currentUser: state.auth.currentUser,
+		issuedAssignments: state.assignment.studentAssignments
 	}
 }
 
@@ -154,6 +178,9 @@ function mapDispatchToProps(dispatch){
 	return {
 		submit: (answers, assignmentId)=>{
 			dispatch(submitAssignment(answers, assignmentId))
+		},
+		getAssignments: (studentId) => {
+			return dispatch(getStudentAssignments(studentId))
 		}
 	}
 }

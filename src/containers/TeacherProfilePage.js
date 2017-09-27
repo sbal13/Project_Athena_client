@@ -8,12 +8,14 @@ class TeacherProfilePage extends React.Component {
 
 	
 
-	componentDidMount(){
+	componentWillMount(){
 		this.props.getTeacherAssignments(this.props.teacher.id)
 	}
 
-	shouldComponentUpdate(nextProps){
-		return this.props.teacher.id !== nextProps.teacher.id || this.props.teacherAssignments.length === 0
+	componentWillUpdate(nextProps){
+		if (this.props.teacher.id !== nextProps.teacher.id){
+			this.props.getTeacherAssignments(nextProps.teacher.id)
+		}
 	}
 
 

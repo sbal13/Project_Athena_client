@@ -10,11 +10,13 @@ class StudentDash extends React.Component{
 
 	state = {
 		displayedTeacherId: null,
-		sortedByTeacher: []
+		sortedByTeacher: [],
+		loaded: false
 	}
 
 	componentDidMount(){
 		this.props.getDashboardInfo(this.props.student.id)
+		.then(res => this.setState({loaded: true}))
 	}
 
 	openDetails = (event, data) => {
@@ -83,7 +85,7 @@ class StudentDash extends React.Component{
 						<Grid.Row >
 							<Grid.Column>
 								<Card fluid style={{height: "400px", overflow:"auto"}}>
-									<AssignmentTable users={this.props.teachers} assignments={this.state.displayedTeacherId ? this.state.sortedByTeacher: this.props.assignments} isStudent={true} goToAssignment={this.goToAssignment}/>
+									{this.state.loaded ? <AssignmentTable users={this.props.teachers} assignments={this.state.displayedTeacherId ? this.state.sortedByTeacher: this.props.assignments} isStudent={true} goToAssignment={this.goToAssignment}/>: null}
 								</Card>
 							</Grid.Column>
 						</Grid.Row>

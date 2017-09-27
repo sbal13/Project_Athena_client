@@ -14,13 +14,14 @@ class StudentProfilePage extends React.Component {
 		this.props.getStudentAssignments(this.props.student.id)
 	}
 
-	shouldComponentUpdate(nextProps){
-		return this.props.student.id !== nextProps.student.id || this.props.studentAssignments.length === 0
+	componentWillUpdate(nextProps){
+		if (this.props.student.id !== nextProps.student.id){
+			this.props.getStudentAssignments(nextProps.student.id)
+		}
 	}
 
 	render(){
 		const {description, username, email, subjects,first_name, last_name} = this.props.student
-
 		const completedAssignments = this.props.studentAssignments.map(assignment => { return {details: assignment.issued_assignments.assignment_details}})
 		return (
 			<Grid centered columns={2}>

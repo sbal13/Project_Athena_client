@@ -24,13 +24,14 @@ class CompleteAssignmentPage extends React.Component{
 function mapDispatchToProps(dispatch){
 	return {
 		getAssignment: (id) => {
-			dispatch(getAssignment(id))
+			return dispatch(getAssignment(id))
 		}
 	}
 }
 function mapStateToProps(state){
 	return {
-		assignment: state.assignment.currentAssignment
+		assignment: state.assignment.currentAssignment,
+		currentUser: state.auth.user
 	}
 }
 

@@ -5,6 +5,8 @@ import {connect} from 'react-redux'
 import {ASSIGNMENT_TYPES, GRADES, SUBJECTS} from '../helpers/constants'
 import {newAssignment} from '../actions/assignments'
 import {Form, Grid, Card, Segment, Button, Rating, Input, Label} from 'semantic-ui-react'
+import {alertOptions} from '../helpers/AlertOptions'
+import AlertContainer from 'react-alert'
 
 class NewTestForm extends React.Component {
 	state = {
@@ -21,7 +23,8 @@ class NewTestForm extends React.Component {
 		assignmentType: "",
 		grade: "",
 		timed: false,
-		time: 0
+		time: 0,
+		protected: false
 	}
 	addQuestion = () => {
 		this.setState({
@@ -109,11 +112,22 @@ class NewTestForm extends React.Component {
 
 
 	createAssignment = () => {
-		this.props.create(this.state, this.props.history)
+		const validator = validateTest(this.state)
+		if (validator.length === 0) {
+			this.props.create(this.state, this.props.history)
+		} else {
+			validator.forEach(message => {
+				this.msg.error(message)
+			})
+		}
 	}
 
 	toggleTime = () => {
 		this.setState({timed: !this.state.timed})
+	}
+
+	changeProtected = () =>{
+		this.setState({protected: !this.state.protected})
 	}
 	
 	render(){
@@ -134,7 +148,6 @@ class NewTestForm extends React.Component {
 
 		})
 
-		const valid = validateTest(this.state)
 		return (
 			<Grid relaxed columns={3}>
 				<Grid.Column width={1}/>
@@ -179,12 +192,14 @@ class NewTestForm extends React.Component {
 									onChange={this.handleSelection}/>
 							</Form>
 							<Segment>
-								
-								<Input labelPosition='right' fluid type='number' placeholder='Time'>
-									<Button toggle active={this.state.timed} onClick={this.toggleTime}>Timed</Button>
-									<input onChange={this.handleAssignmentDetailChange} name="time" value={this.state.time}/>
-									<Label>mins</Label>
-								</Input>
+								<Form>
+									<Form.Input labelPosition='right' fluid type='number' placeholder='Time'>
+										<Button toggle active={this.state.timed} onClick={this.toggleTime}>Timed</Button>
+										<input onChange={this.handleAssignmentDetailChange} name="time" value={this.state.time}/>
+										<Label>mins</Label>
+									</Form.Input>
+									<Form.Button fluid toggle color={this.state.protected ? "red" : "green"} onClick={this.changeProtected}>{this.state.protected ? "Protected" : "Public"}</Form.Button>
+								</Form>
 							</Segment>
 							<Segment>
 								<strong>difficulty</strong>
@@ -199,9 +214,10 @@ class NewTestForm extends React.Component {
 							</Segment>
 						</Card.Content>
 						<Button fluid color="teal" onClick={this.addQuestion}>Add Question</Button>
-						<Button fluid color={valid ? "green" : null} disabled={!valid} onClick={this.createAssignment}>Create Assignment</Button>
+						<Button fluid color="green" onClick={this.createAssignment}>Create Assignment</Button>
 					</Card>
 				</Grid.Column>
+				<AlertContainer ref={a => this.msg = a} {...alertOptions} />
 			</Grid>
 	)}
 }

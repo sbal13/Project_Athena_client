@@ -6,29 +6,25 @@ import StudentProfilePage from './StudentProfilePage'
 
 class ProfilePage extends React.Component {
 
-
-	componentDidMount(){
+	componentWillMount(){
 		const userId = this.props.location.pathname.split("/")[2]
 		this.props.getUser(userId)
 	}
 
 	componentWillUpdate(nextProps){
-		const userId = this.props.location.pathname.split("/")[2]
-		this.props.getUser(userId)
+
+		const userId = nextProps.location.pathname.split("/")[2]
+
+		if (this.props.user.id !== parseInt(userId,10)){
+			this.props.getUser(userId)
+		} 
 	}
-
-	shouldComponentUpdate(nextProps){
-		return this.props.user.id !== nextProps.user.id
-	}
-
-
-
 
 	render(){
 		let profileType = null;
-		if (this.props.user.user_type === "teacher") {
+		if (this.props.user && this.props.user.user_type === "teacher") {
 			profileType = <TeacherProfilePage history={this.props.history} teacher={this.props.user}/>
-		} else if (this.props.user.user_type === "student") {
+		} else if (this.props.user && this.props.user.user_type === "student") {
 			profileType = <StudentProfilePage history={this.props.history} student={this.props.user} />
 		}
 
