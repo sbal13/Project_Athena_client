@@ -1,24 +1,37 @@
 export const ASSIGNMENT_TYPES = [
 	"multiple choice",
 	"essay",
-	"matching",
 	"open ended",
 	"mixed"
+].map((type,index) => ({key: index, value: type, text: type}) )
+
+export const QUESTION_TYPES = [
+	"multiple choice",
+	"essay",
+	"open ended"
 ].map((type,index) => ({key: index, value: type, text: type}) )
 
 
 
 export const SUBJECTS = [
-		"english literature",
-		"math",
-		"chemistry",
-		"biology",
-		"writing",
-		"grammar",
-		"physics",
-		"foreign language",
-		"history"
+		"English",
+		"Math",
+		"Chemistry",
+		"Biology",
+		"Writing",
+		"Grammar",
+		"Physics",
+		"Foreign Language",
+		"History"
 	].map((subject,index) => ({key: index, value: subject, text: subject}) )
+
+export const STATUS_TYPES = [
+		"Pending",
+		"Submitted",
+		"Graded"
+	].map((type,index) => ({key: index, value: type, text: type}) )
+
+
 
 export const GRADES = [
 			"1st",

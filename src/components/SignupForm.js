@@ -46,7 +46,16 @@ class SignupForm extends React.Component {
 	}
 
 	handleFinalSubmit = () => {
-		this.props.signup(this.state, this.props.history)
+		this.props.signup(this.state, this.props.history).
+		then(failure => {
+			if (failure) {
+				for(let key in failure){
+					failure[key].forEach(message => {
+						this.msg.error(key + " " + message)
+					})
+				}
+			}
+		})
 	}
 
 
@@ -74,7 +83,6 @@ class SignupForm extends React.Component {
 				<Form.Input type="text"
 					   fluid
 					   name="username" 
-					   disabled={!!this.state.type}
 					   value={this.state.username} 
 					   placeholder="username"
 					   onChange={this.handleChange}/>
@@ -83,15 +91,13 @@ class SignupForm extends React.Component {
 					   name="email"
 					   fluid 
 					   value={this.state.email} 
-					   disabled={!!this.state.type}
 					   placeholder="email"
 					   onChange={this.handleChange}/>
 					   
 				<Form.Input type="text"
 					   name="firstName"
 					   fluid 
-					   value={this.state.firstName}
-					   disabled={!!this.state.type} 
+					   value={this.state.firstName} 
 					   placeholder="first name"
 					   onChange={this.handleChange}/>
 					   
@@ -99,7 +105,6 @@ class SignupForm extends React.Component {
 					   name="lastName"
 					   fluid 
 					   value={this.state.lastName} 
-					   disabled={!!this.state.type}
 					   placeholder="last name"
 					   onChange={this.handleChange}/>
 					   
@@ -107,7 +112,6 @@ class SignupForm extends React.Component {
 					   name="password"
 					   fluid 
 					   value={this.state.password} 
-					   disabled={!!this.state.type}
 					   placeholder="password"
 					   onChange={this.handleChange}/>
 					   
@@ -115,7 +119,6 @@ class SignupForm extends React.Component {
 					   name="passwordConfirmation" 
 					   fluid
 					   value={this.state.passwordConfirmation} 
-					   disabled={!!this.state.type}
 					   placeholder="password confirmation"
 					   onChange={this.handleChange}/>
 
@@ -140,7 +143,7 @@ class SignupForm extends React.Component {
 function mapDispatchToProps (dispatch) {
 	return {
 		signup: (userData, history) => {
-			dispatch(signup(userData, history))
+			return dispatch(signup(userData, history))
 		}
 	}
 }

@@ -155,6 +155,44 @@ export function getAllIssuedAssignments(teacherId){
   }
 }
 
+export function getSubmittedAssignment(issuedAssignmentId){
+    return function(dispatch){
+    const url = `http://localhost:3000/api/v1/submitted/${issuedAssignmentId}`
+
+    return fetch(url)
+    .then(res => res.json())
+    .then(json => {
+      if (json.success){
+        dispatch({type: "GET_SUBMITTED_ASSIGNMENT", payload: json})
+      }
+    })
+  }
+}
+
+export function finalizeScore(finalParams,issuedAssignmentId){
+    return function(dispatch){
+    const url = `http://localhost:3000/api/v1/submitted/${issuedAssignmentId}/finalize`
+    const body = JSON.stringify({final_points: finalParams.pointsPerQuestion, comments: finalParams.comments})
+
+
+       const headers = {
+          method: 'post',
+          body: body,
+          headers: {
+            "Content-Type":"application/json",
+            "Accept":"application/json"
+          }
+        }
+    return fetch(url, headers)
+    .then(res => res.json())
+    .then(json => {
+      if (json.success){
+        dispatch({type: "FINALIZE_SCORE", payload: json})
+      }
+    })
+  }
+}
+
 export function clearTeacherData(){
   return function(dispatch){
     dispatch({type: "CLEAR_TEACHER_DATA"})

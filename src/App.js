@@ -7,6 +7,7 @@ import LoginPage from './containers/LoginPage'
 import NewTestPage from './containers/NewTestPage'
 import ProfilePage from './containers/ProfilePage'
 import CompleteAssignmentPage from './containers/CompleteAssignmentPage'
+import SubmittedAssignmentPage from './containers/SubmittedAssignmentPage'
 import DashboardPage from './containers/DashboardPage'
 import IndexPage from './containers/IndexPage'
 import {getUserData} from './actions/auth'
@@ -35,13 +36,14 @@ class App extends Component {
         <Grid.Row>
           <Grid.Column>
             <Route exact path="/"/>
-            <Route exact path="/index" component={IndexPage}/>
+            <Route exact path="/index" render={(props) => <IndexPage {...props} currentUser={this.props.currentUser}/>}/>
             <Route exact path="/signup" component={SignupPage}/>
             <Route exact path="/login" component={LoginPage}/>
             <Route exact path="/dashboard" component={DashboardPage}/>
             <Route exact path="/new-assignment" render={(props) => <NewTestPage {...props} currentUser={this.props.currentUser}/>}/>
             <Route path="/assignment/:id" component={CompleteAssignmentPage}/>
             <Route path="/user/:id" component={ProfilePage}/>
+            <Route path="/submitted/:id" component={(props) => <SubmittedAssignmentPage {...props} currentUser={this.props.currentUser}/>}/>
           </Grid.Column>
         </Grid.Row>
       </Grid>

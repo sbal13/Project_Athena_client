@@ -1,21 +1,16 @@
 import React from 'react';
-import QuestionForm from './QuestionForm'
+import QuestionRouter from './QuestionRouter'
 import {validateTest} from '../helpers/validateTest'
 import {connect} from 'react-redux'
-import {ASSIGNMENT_TYPES, GRADES, SUBJECTS} from '../helpers/constants'
+import {ASSIGNMENT_TYPES, GRADES, SUBJECTS, QUESTION_TYPES} from '../helpers/constants'
 import {newAssignment} from '../actions/assignments'
-import {Form, Grid, Card, Segment, Button, Rating, Input, Label} from 'semantic-ui-react'
+import {Form, Grid, Card, Segment, Button, Rating, Input, Label, Select} from 'semantic-ui-react'
 import {alertOptions} from '../helpers/AlertOptions'
 import AlertContainer from 'react-alert'
 
 class NewTestForm extends React.Component {
 	state = {
-		questions: [{
-			question: "",
-			answer: "",
-			points: 0,
-			choices: [""]
-		}],
+		questions: [],
 		title: "",
 		difficulty: 0,
 		subject: "",
@@ -23,12 +18,30 @@ class NewTestForm extends React.Component {
 		assignmentType: "",
 		grade: "",
 		timed: false,
+		questionType: "multiple choice",
 		time: 0,
 		protected: false
 	}
 	addQuestion = () => {
+
+		let question;
+		switch(this.state.questionType){
+			case 'multiple choice':
+				question = {questionType: "multiple choice", question: "",answer: "", points: 0, choices: [""]}
+				break;
+			case 'open ended':
+				question = {questionType: "open ended", question: "", points: 0}
+				break;
+			case 'essay':
+				question = {questionType: "essay", question: "", points: 0}
+				break;
+			default:
+				question = null
+				break;
+		}
+
 		this.setState({
-			questions: [...this.state.questions, {question: "",answer: "", points: 0, choices: [""]}]
+			questions: [...this.state.questions, question]
 		})
 	}
 
@@ -131,37 +144,33 @@ class NewTestForm extends React.Component {
 	}
 	
 	render(){
-
-		let questionComponents = this.state.questions.map((question,index) => {
-			return  <QuestionForm key={index}
-								  question={question.question}
-								  points={question.points}
-								  handleChange={this.handleQuestionChange}
+		let MCQuestionComponents = this.state.questions.map((question,index) => {
+			return  <QuestionRouter key={index}
+								  question={question}
+								  handleQuestionChange={this.handleQuestionChange}
 								  addChoice={this.addChoice}
 								  questionNumber={index} 
-								  answer={question.answer} 
 								  changeAnswer={this.changeAnswer}
-								  choices={question.choices}
 								  deleteQuestion={this.deleteQuestion}
 								  deleteChoice={this.deleteChoice}
 								  />
 
 		})
-
+		console.log(this.state)
 		return (
 			<Grid relaxed columns={3}>
 				<Grid.Column width={1}/>
 
 				<Grid.Column width={11}>
 					<Grid>
-						{questionComponents}
+						{MCQuestionComponents}
 					</Grid>
 				</Grid.Column>
 
 				<Grid.Column width={4}>
 
-					<Card style={{position: "fixed", top: "10%"}}>
-						<Card.Header>assignment details</Card.Header>
+					<Card style={{position: "fixed", top: "7%"}}>
+						<Card.Header textAlign="center">assignment details</Card.Header>
 						<Card.Content>
 							<Form>
 							<Form.Input type="text"
@@ -190,6 +199,7 @@ class NewTestForm extends React.Component {
 									name="grade"
 									fluid
 									onChange={this.handleSelection}/>
+							
 							</Form>
 							<Segment>
 								<Form>
@@ -212,6 +222,11 @@ class NewTestForm extends React.Component {
 										name="difficulty"
 										onRate={this.handleSelection}/>
 							</Segment>
+							<Select options={QUESTION_TYPES} 
+									name="questionType"
+									value={this.state.questionType}
+									fluid
+									onChange={this.handleSelection}/>
 						</Card.Content>
 						<Button fluid color="teal" onClick={this.addQuestion}>Add Question</Button>
 						<Button fluid color="green" onClick={this.createAssignment}>Create Assignment</Button>

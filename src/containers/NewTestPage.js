@@ -5,17 +5,13 @@ class NewTestPage extends React.Component {
 	componentDidMount(){
 		if(!localStorage.getItem('jwt')){
 			this.props.history.push('/login')
-		} else if( this.props.currentUser.user_type === "student") {
-			this.props.history.push('/index')
+		} else if( this.props.currentUser.user_type !== "teacher") {
+			this.props.history.push('/dashboard')
 		}
 	}
 
-	componentWillReceiveProps(nextProps){
-		if(nextProps.currentUser.user_type === "student") {
-			nextProps.history.push('/index')
-		}
-	}
 	render(){
+		console.log(this.props)
 		return (
 			<div>
 				<NewTestForm history={this.props.history}/>

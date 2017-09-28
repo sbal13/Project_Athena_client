@@ -2,7 +2,7 @@ import React from 'react'
 import {Form, Button, Grid, Card, Input, Label} from 'semantic-ui-react'
 
 
-class QuestionForm extends React.Component{
+class MCQuestionForm extends React.Component{
 
 	handleChange = (event) =>{
 		this.props.handleChange(this.props.questionNumber, event.target.name, event.target.value)
@@ -102,4 +102,4 @@ class QuestionForm extends React.Component{
 	)}
 }
 
-export default QuestionForm
+export default MCQuestionForm

@@ -1,10 +1,13 @@
-export default function assignmentReducer (state={currentAssignment: {}, 
-												  allAssignments: [], 
-												  studentAssignments: [], 
-												  allStudentAssignments: [],
-												  finishedAssignments: [],
-												  teacherAssignments:[]}, 
-										   action){
+
+const defaultState = {currentAssignment: {},
+					  currentSubmittedAssignment:{},
+					  allAssignments: [], 
+					  studentAssignments: [], 
+					  allStudentAssignments: [],
+					  finishedAssignments: [],
+					  teacherAssignments:[]}
+
+function assignmentReducer (state = defaultState, action){
 	switch(action.type){
 		case "LOAD_ASSIGNMENT":
 			const currentAssignment = {currentAssignment: action.payload.assignment}
@@ -13,6 +16,8 @@ export default function assignmentReducer (state={currentAssignment: {},
 			return Object.assign({}, state, {allAssignments: [...state.allAssignments, action.payload.assignment]})
 		case "ASSIGN_ASSIGNMENT":
 			return Object.assign({}, state, {allStudentAssignments: [...state.allStudentAssignments, action.payload.assignment]})
+		case "GET_SUBMITTED_ASSIGNMENT":
+			return Object.assign({}, state, {currentSubmittedAssignment: action.payload.issued_assignment})
 		case "GET_ALL_ASSIGNMENTS":
 			return Object.assign({}, state, {allAssignments: action.payload.assignments})
 		case "GET_TEACHER_ASSIGNMENTS":
@@ -23,6 +28,8 @@ export default function assignmentReducer (state={currentAssignment: {},
 			return Object.assign({}, state, {allStudentAssignments: action.payload.assignments})
 		case "CLEAR_TEACHER_DATA":
 			return Object.assign({}, state, {teacherAssignments: []})
+		case "FINALIZE_SCORE":
+			return Object.assign({}, state, {studentAssignments: [...state.studentAssignments, action.payload.assignment]})
 		case "USER_FINISHED_ASSIGNMENTS":
 			return  Object.assign({}, state, {finishedAssignments: [...state.finishedAssignments, action.payload.finished_assignments]})
 
@@ -32,3 +39,5 @@ export default function assignmentReducer (state={currentAssignment: {},
 
 	
 }
+
+export default assignmentReducer

@@ -8,6 +8,7 @@ import AssignmentTable from '../components/AssignmentTable'
 import moment from 'moment';
 import {alertOptions} from '../helpers/AlertOptions'
 import AlertContainer from 'react-alert'
+import {Link} from 'react-router-dom'
 
 
 
@@ -80,7 +81,7 @@ class TeacherDash extends React.Component{
 			    </Table.Header>	
 			    <Table.Body>
 			    	<Table.Row>
-				        <Table.Cell>{displayedStudent.username}</Table.Cell>
+				        <Table.Cell><Link to={`/user/${displayedStudent.id}`}>{displayedStudent.username}</Link></Table.Cell>
 				        <Table.Cell>{`${displayedStudent.first_name} ${displayedStudent.last_name}`}</Table.Cell>
 				        <Table.Cell>{displayedStudent.email}</Table.Cell>
 				        <Table.Cell>{displayedStudent.subjects.join(", ")}</Table.Cell>

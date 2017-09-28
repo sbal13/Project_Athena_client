@@ -114,7 +114,7 @@ class ActiveTest extends React.Component {
 	render(){
 
 		const {details, questions} = this.props.assignment
-		console.log("Rendering...")
+		console.log(this.state)
 		return (
 		<div>
 			<Grid  centered columns={2} style={{top: "10%"}} >
@@ -126,15 +126,15 @@ class ActiveTest extends React.Component {
 												   selectAnswer={this.selectAnswer} 
 												   questionDetails={question}
 												   over={this.state.over}/>
-							})
-						: null }
+					}) : null }
 				</Grid.Column>
 				<Grid.Column width={4}>
 					<Card.Group style={{position: "fixed", top: "10%"}}>
 						{!details ? <Card/> : <ActiveAssignmentDetails details={details} 
 																	   seeResults = {this.seeResults} 
 																	   openModal={this.openModal} 
-																	   submit={this.submitAssignment} 
+																	   submit={this.submitAssignment}
+																	   questions={questions} 
 																	   over={this.state.over} 
 																	   start={this.startAssignment} 
 																	   started={this.state.started}

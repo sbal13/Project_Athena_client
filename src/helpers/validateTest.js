@@ -50,32 +50,29 @@ export function validateTest(state){
 }
 
 function validateQuestion(question, questionNum){
-	const  {answer, points, choices} = question
+	const  {answer, points, choices, questionType} = question
 	const messages = []
 	
-	// return !!question.question &&
-	// 	   !!question.answer &&
-	// 	   question.points > 0 &&
-	// 	   question.choices.length > 0 &&
-	// 	   (question.choices.filter(choice => !choice).length === 0)
+	if (points <= 0){
+	 	messages.push(`#${questionNum} must have a point value greater than 0!`)
+	}
 
 	if (!question.question){
 		messages.push(`#${questionNum} has no question!`)
 	}
 
-	if (!answer){
-	 	messages.push(`#${questionNum} has no answer!`)
-	}
+	if (questionType === "multiple choice"){
+		if (!answer){
+		 	messages.push(`#${questionNum} has no answer!`)
+		}
 
-	if (points <= 0){
-	 	messages.push(`#${questionNum} must have a point value greater than 0!`)
-	}
 
-	if (choices.length === 0){
-		messages.push(`#${questionNum} has no choices!`)
-	} else {
-		if (question.choices.filter(choice => !choice).length !== 0){
-			messages.push(`#${questionNum} has a blank choice!`)
+		if (choices.length === 0){
+			messages.push(`#${questionNum} has no choices!`)
+		} else {
+			if (question.choices.filter(choice => !choice).length !== 0){
+				messages.push(`#${questionNum} has a blank choice!`)
+			}
 		}
 	}
 

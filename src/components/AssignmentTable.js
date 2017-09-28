@@ -1,6 +1,7 @@
 import React from 'react'
 import {Table, Button} from 'semantic-ui-react'
 import Moment from 'react-moment';
+import {Link} from 'react-router-dom'
 
 
 const AssignmentTable = ({assignments, isStudent, users, goToAssignment}) =>{
@@ -28,20 +29,22 @@ const AssignmentTable = ({assignments, isStudent, users, goToAssignment}) =>{
 			    		const score = details.status === "Graded" ? `${details.final_score}/${assignment_details.total_points} (${percentage}%)` : "Ungraded"
 			    		
 
-			    		const viewButton =  <Button name={assignment_details.id}>view</Button>
+			    		const viewButton =  <Link to={`/submitted/${details.id}`}><Button name={assignment_details.id}>view</Button></Link>
+			    		const finishGradingButton = <Link to={`/submitted/${details.id}`}><Button name={assignment_details.id}>finish grading</Button></Link>
 
-			    		const teacherActionsButton = details.status === "Submitted" ? <Button name={assignment_details.id}>finish grading</Button> : viewButton
+			    		const teacherActionsButton = details.status === "Submitted" ? finishGradingButton : viewButton
 			    		const studentActionsButton = details.status === "Pending" ? <Button onClick={goToAssignment} name={assignment_details.id}>do assignment</Button> : viewButton 
-			    		let username;
+			    		
+			    		let user;
 
 			    		if (isStudent){
-			    			username = users.find(user => user.id === assignment_details.teacher_id).username
+			    			user = users.find(user => user.id === assignment_details.teacher_id)
 			    		} else {
-			    			username = users.find(user => user.id === details.student_id).username
+			    			user = users.find(user => user.id === details.student_id)
 			    		}
 				    	return(
 					    	<Table.Row key={index}>
-						        <Table.Cell>{username}</Table.Cell>
+						        <Table.Cell><Link to={`user/${user.id}`}>{user.username}</Link></Table.Cell>
 						        <Table.Cell>{assignment_details.title}</Table.Cell>
 						        <Table.Cell>{assignment_details.subject}</Table.Cell>
 						        <Table.Cell>{assignment_details.assignment_type}</Table.Cell>

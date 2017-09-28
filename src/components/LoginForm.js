@@ -2,6 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux'
 import {login} from '../actions/auth'
 import {Form, Segment, Button, Grid} from 'semantic-ui-react'
+import {alertOptions} from '../helpers/AlertOptions'
+import AlertContainer from 'react-alert'
 
 class LoginForm extends React.Component {
 
@@ -19,6 +21,11 @@ class LoginForm extends React.Component {
 	handleSubmit = (event) => {
 		event.preventDefault()
 		this.props.login(this.state, this.props.history)
+		.then(failure => {
+			if (failure){
+				this.msg.error(failure)
+			}
+		})
 	}
 
 	render(){
@@ -47,6 +54,8 @@ class LoginForm extends React.Component {
 					</Form>
 				</Segment>
 			</Grid.Column>
+			<AlertContainer ref={a => this.msg = a} {...alertOptions} />
+
 		</Grid>
 	)}
 	
@@ -55,7 +64,7 @@ class LoginForm extends React.Component {
 function mapDispatchToProps (dispatch) {
 	return {
 		login: (userData, history) => {
-			dispatch(login(userData, history))
+			return dispatch(login(userData, history))
 		}
 	}
 }

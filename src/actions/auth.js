@@ -14,13 +14,15 @@ export function login(userData, history) {
         }
       }
 
-      fetch(url, headers)
+      return fetch(url, headers)
       .then(res => res.json())
       .then(json => {
         if (json.success) {
           dispatch({type: "LOG_IN", payload: json})
           history.push('/index', json.success)
-        } 
+        } else {
+          return json.failure
+        }
       })
     }
   }
@@ -41,12 +43,14 @@ export function signup(userData, history) {
         }
       }
 
-      fetch(url, headers)
+      return fetch(url, headers)
       .then(res => res.json())
       .then(json => {
         if (json.success) {
           dispatch({type: "LOG_IN", payload: json})
           history.push('/index', json.success)
+        } else {
+          return json.failure
         }
       })
     }

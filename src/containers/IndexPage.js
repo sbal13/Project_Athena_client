@@ -9,8 +9,13 @@ class IndexPage extends React.Component {
 
 
  	componentDidMount() {
-    	this.props.getAssignments()
+ 		if(this.props.currentUser.user_type !== "teacher") {
+			this.props.history.push('/dashboard')
+		} else{
+    		this.props.getAssignments()
+    	}
     }
+
 
 	render(){
 		return(
@@ -23,7 +28,9 @@ class IndexPage extends React.Component {
 }
 
 function mapStateToProps(state) {
-	return {allAssignments: state.assignment.allAssignments}
+	return {
+		allAssignments: state.assignment.allAssignments	
+	}
 }
 
 function mapDispatchToProps(dispatch) {
