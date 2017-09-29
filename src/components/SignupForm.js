@@ -46,8 +46,8 @@ class SignupForm extends React.Component {
 	}
 
 	handleFinalSubmit = () => {
-		this.props.signup(this.state, this.props.history).
-		then(failure => {
+		this.props.signup(this.state, this.props.history)
+		.then(failure => {
 			if (failure) {
 				for(let key in failure){
 					failure[key].forEach(message => {

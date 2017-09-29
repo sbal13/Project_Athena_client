@@ -16,12 +16,12 @@ export function newAssignment(assignment, history) {
         }
       }
 
-      fetch(url, headers)
+      return fetch(url, headers)
       .then(res => res.json())
       .then(json => {
         if (json.success) {
           dispatch({type: "CREATE_NEW_ASSIGNMENT", payload: json})
-          history.push(`/user/${json.assignment.creator.id}`, json.success)
+          history.push("/dashboard", json.success)
         } 
       })
     }
@@ -112,10 +112,10 @@ export function getStudentAssignments(id){
 }
 
 
-export function assign(studentId, assignmentId, dueDate) {
+export function assign(students, assignments, dueDate) {
     return function(dispatch){
       const url = `http://localhost:3000/api/v1/assignments/assign`
-      const body = JSON.stringify({student_id: studentId, assignment_id: assignmentId, due_date: dueDate})
+      const body = JSON.stringify({students: students, assignments: assignments, due_date: dueDate})
       const jwtToken = localStorage.getItem("jwt")
 
 
@@ -132,10 +132,10 @@ export function assign(studentId, assignmentId, dueDate) {
       return fetch(url, headers)
       .then(res => res.json())
       .then(json => {
-        if (json.success){
+        if (json.messages.length === 0){
           dispatch({type: "ASSIGN_ASSIGNMENT", payload: json})
         } else {
-          return json.failure
+          return json.messages
         }
       })
     }

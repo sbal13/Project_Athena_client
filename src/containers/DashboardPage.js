@@ -15,7 +15,7 @@ class DashboardPage extends React.Component{
 
 		return (
 			<div>
-				{dashType}
+				{Object.keys(this.props.currentUser).length > 0 ? dashType : null}
 			</div>
 	)}
 }

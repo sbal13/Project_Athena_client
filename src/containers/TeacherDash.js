@@ -2,23 +2,29 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {getUserStudents} from '../actions/users'
 import {getAllIssuedAssignments, getTeacherAssignments, assign} from '../actions/assignments'
-import {Grid, Card, Table} from 'semantic-ui-react'
+import {Grid, Card} from 'semantic-ui-react'
 import TeacherDashControls from '../components/TeacherDashControls'
 import AssignmentTable from '../components/AssignmentTable'
 import moment from 'moment';
 import {alertOptions} from '../helpers/AlertOptions'
 import AlertContainer from 'react-alert'
-import {Link} from 'react-router-dom'
+import BarChart from '../components/BarChart'
 
 
 
 class TeacherDash extends React.Component{
 
 	state = {
-		displayedStudentId: null,
-		sortedByStudent: [],
-		chosenStudentId: null,
-		chosenAssignmentId: null,
+		studentFilter: null,
+		assignmentFilter: null,
+		subjectFilter: null,
+		statusFilter: null,
+		filterByStudent: false,
+		filterByAssignment: false,
+		filterBySubject: false,
+		filterByStatus: false,
+		chosenStudents: [],
+		chosenAssignments: [],
 		date: moment()
 	}
 
@@ -26,27 +32,23 @@ class TeacherDash extends React.Component{
 		this.props.getDashboardInfo(this.props.teacher.id)
 	}
 
-	openDetails = (event, data) => {
-		const studentId = data.value
-		const filteredAssignments = this.props.studentAssignments.filter(assignment => assignment.issued_assignments.details.student_id === studentId)
-		this.setState({displayedStudentId: studentId, sortedByStudent:filteredAssignments})
-	}
-
 	chooseStudent = (event, data) => {
-		this.setState({chosenStudentId: data.value})
+		this.setState({chosenStudents: data.value})
 	}
 
 	chooseAssignment = (event, data) => {
-		this.setState({chosenAssignmentId: data.value})
+		this.setState({chosenAssignments: data.value})
 	}
 
 	assignAssignment = () => {
-		const {chosenStudentId, chosenAssignmentId} = this.state
-		if (chosenAssignmentId && chosenStudentId){
-			this.props.assign(this.state.chosenStudentId, this.state.chosenAssignmentId, this.state.date)
-			.then(res => {
-				if (res){
-					this.msg.error(res)	
+		const {chosenStudents, chosenAssignments} = this.state
+		if (chosenAssignments && chosenStudents){
+			this.props.assign(this.state.chosenStudents, this.state.chosenAssignments, this.state.date)
+			.then(messages => {
+				if (messages){
+					messages.forEach( message =>{
+					this.msg.error(message)	
+					})
 				}
 			})
 		} else {
@@ -59,70 +61,85 @@ class TeacherDash extends React.Component{
 	}
 
 
+	chooseFilter = (event, data) => {
+		this.setState({[data.name]: data.value})
+	}
+
+	toggle = (name) =>{
+		this.setState({[name]: !this.state[name]})
+	}
+
+	applyFilter = () =>{
+		let filteredAssignments = this.props.studentAssignments.slice()
+
+		if (this.state.filterByStudent) {
+			filteredAssignments = filteredAssignments.filter(assignment => assignment.issued_assignments.details.student_id == this.state.studentFilter)
+		}
+		if (this.state.filterByAssignment) {
+			filteredAssignments = filteredAssignments.filter(assignment => assignment.issued_assignments.assignment_details.id == this.state.assignmentFilter)
+		}
+
+		if (this.state.filterBySubject) {
+			filteredAssignments = filteredAssignments.filter(assignment => assignment.issued_assignments.assignment_details.subject === this.state.subjectFilter)
+		}
+
+		if (this.state.filterByStatus) {
+			filteredAssignments = filteredAssignments.filter(assignment => assignment.issued_assignments.details.status === this.state.statusFilter)
+		}
+
+		return filteredAssignments
+	}
+
+	shouldApplyFilter = ()=> {
+		return this.state.filterByStatus || this.state.filterBySubject || this.state.filterByStudent || this.state.filterByAssignment
+	}
+
+
 	render(){
-		const displayedStudent = this.props.students.find(student => student.id === this.state.displayedStudentId) || {first_name: "", last_name: "", subjects:[]}
 
-		const pendingAssignments = this.props.studentAssignments.filter(assignment => {
-				return assignment.issued_assignments.assignment_details.teacher_id === this.props.teacher.id && 
-				assignment.issued_assignments.details.student_id === this.state.displayedStudentId &&
-				assignment.issued_assignments.details.status === "Pending"
-			})
+		let assignments = this.props.studentAssignments
 
-		const studentDetails = (
-			 <Table celled padded>
-			    <Table.Header>
-			      <Table.Row>
-			        <Table.HeaderCell>Username</Table.HeaderCell>
-			        <Table.HeaderCell>Name</Table.HeaderCell>
-			        <Table.HeaderCell>Email</Table.HeaderCell>
-			        <Table.HeaderCell>Subjects</Table.HeaderCell>
-			        <Table.HeaderCell>Pending Assignments</Table.HeaderCell>
-			      </Table.Row>
-			    </Table.Header>	
-			    <Table.Body>
-			    	<Table.Row>
-				        <Table.Cell><Link to={`/user/${displayedStudent.id}`}>{displayedStudent.username}</Link></Table.Cell>
-				        <Table.Cell>{`${displayedStudent.first_name} ${displayedStudent.last_name}`}</Table.Cell>
-				        <Table.Cell>{displayedStudent.email}</Table.Cell>
-				        <Table.Cell>{displayedStudent.subjects.join(", ")}</Table.Cell>
-				        <Table.Cell>{this.state.displayedStudentId ? pendingAssignments.length : null}</Table.Cell>
-			    	</Table.Row>
-			    </Table.Body>
-			</Table>
-		)
+		let gradedAssignments = assignments.filter(assignment => assignment.issued_assignments.details.status === "Graded")
+
+		console.log(gradedAssignments)
+
+		if (this.shouldApplyFilter()){
+			assignments = this.applyFilter()
+		}
 
 		return (
 			<Grid centered columns={2}>
-				<Grid.Column width={3}>
-					<Card fluid>
-						<TeacherDashControls date={this.state.date} 
-											 handleDateChange={this.handleDateChange} 
-											 students={this.props.students} 
-											 assign={this.assignAssignment} 
-											 chooseAssignment={this.chooseAssignment} 
-											 chooseStudent={this.chooseStudent} 
-											 assignments={this.props.assignments} 
-											 openDetails={this.openDetails}/>
-					</Card>
-				</Grid.Column>
-				<Grid.Column width={10}>
-					<Grid columns={1}>
-						<Grid.Row>
-							<Grid.Column>
-								<Card fluid>
-									{studentDetails}
-								</Card>
-							</Grid.Column>
-						</Grid.Row>
-						<Grid.Row >
-							<Grid.Column>
-								<Card fluid style={{height: "400px", overflow:"auto"}}>
-									<AssignmentTable users={this.props.students} assignments={this.state.displayedStudentId ? this.state.sortedByStudent: this.props.studentAssignments}/>
-								</Card>
-							</Grid.Column>
-						</Grid.Row>
-					</Grid>
-				</Grid.Column>
+				<Grid.Row>
+					<Grid.Column width={5}>
+						<Card fluid>
+							<TeacherDashControls date={this.state.date} 
+												 handleDateChange={this.handleDateChange} 
+												 students={this.props.students} 
+												 assign={this.assignAssignment} 
+												 chooseAssignment={this.chooseAssignment} 
+												 chooseStudent={this.chooseStudent} 
+												 assignments={this.props.assignments} 
+												 chooseFilter={this.chooseFilter}
+												 toggle={this.toggle}
+												 filterByStudent= {this.state.filterByStudent}
+												 filterByAssignment= {this.state.filterByAssignment}
+												 filterBySubject= {this.state.filterBySubject}	
+												 filterByStatus= {this.state.filterByStatus}/>
+						</Card>
+					</Grid.Column>
+					<Grid.Column width={10}>
+						<Card fluid style={{height: "500px", overflow:"auto"}}>
+							<AssignmentTable users={this.props.students} assignments={assignments}/>
+						</Card>
+					</Grid.Column>
+				</Grid.Row>
+
+				<Grid.Row>
+					<Grid.Column width={12}>
+						<BarChart students={this.props.students} assignments={this.props.assignments} studentAssignments={gradedAssignments}/>
+					</Grid.Column>
+				</Grid.Row>
+
 				<AlertContainer ref={a => this.msg = a} {...alertOptions} />
 			</Grid>
 	)}
@@ -146,8 +163,8 @@ function mapDispatchToProps(dispatch){
 				   .then(res => dispatch(getTeacherAssignments(teacherId)))
 		},
 
-		assign: (studentId, assignmentId, dueDate) => {
-			return dispatch(assign(studentId, assignmentId, dueDate))
+		assign: (students, assignments, dueDate) => {
+			return dispatch(assign(students, assignments, dueDate))
 		}
 	}
 }

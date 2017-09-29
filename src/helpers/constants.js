@@ -25,6 +25,15 @@ export const SUBJECTS = [
 		"History"
 	].map((subject,index) => ({key: index, value: subject, text: subject}) )
 
+export const PERCENT_INTERVAL = [
+		1,
+		5,
+		10,
+		20,
+		25,
+		50
+	].map((interval,index) => ({key: index, value: interval, text: interval}) )
+
 export const STATUS_TYPES = [
 		"Pending",
 		"Submitted",

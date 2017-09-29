@@ -4,7 +4,7 @@ import {validateTest} from '../helpers/validateTest'
 import {connect} from 'react-redux'
 import {ASSIGNMENT_TYPES, GRADES, SUBJECTS, QUESTION_TYPES} from '../helpers/constants'
 import {newAssignment} from '../actions/assignments'
-import {Form, Grid, Card, Segment, Button, Rating, Input, Label, Select} from 'semantic-ui-react'
+import {Form, Grid, Card, Segment, Button, Rating, Label, Select} from 'semantic-ui-react'
 import {alertOptions} from '../helpers/AlertOptions'
 import AlertContainer from 'react-alert'
 

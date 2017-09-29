@@ -31,12 +31,12 @@ const ViewAndGradeControls = ({handleChange, handlePointChange, comments, assign
 				color = "red"
 			}
 		} else {
-			color === null
+			color  = null
 		}
 
 		
 
-		const answer = <div><p>Correct Answer: {question.answer}</p><p>Student's Answer: {details.given_answers[index]}</p></div>
+		const answer = details.status !== "Pending" ? <div><p>Correct Answer: {question.answer}</p><p>Student's Answer: {details.given_answers[index]}</p></div> : null
 		const pointInput = !isTeacher ? `${pointsPerQuestion[index] || "0"}/${question.point_value}` : <Input fluid labelPosition='right' 
 							       type='number'>
 							    	<input
@@ -68,7 +68,7 @@ const ViewAndGradeControls = ({handleChange, handlePointChange, comments, assign
 					<p>Student name: {student.first_name + " " + student.last_name}</p>
 					<p>Username: {student.username}</p>
 					<p>Assignment: {assignmentDetails.title}</p>
-					<strong>Score: {`${points}/${assignmentDetails.total_points} (${Math.round(points/assignmentDetails.total_points*100)}%)`} {details.status ==="Submitted" ? "(Grading required)" : null}</strong>
+					<strong>Score: {`${points || "0"}/${assignmentDetails.total_points} (${Math.round(points/assignmentDetails.total_points*100)}%)`} {details.status ==="Submitted" ? "(Grading required)" : null}</strong>
 				</Segment>
 
 				<Segment>

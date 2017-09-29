@@ -40,9 +40,16 @@ class ViewAndGrade extends React.Component{
 		.then(res => this.props.history.push('/dashboard'))
 	}
 
+	componentWillReceiveProps(nextProps){
+
+			this.setState({
+				comments: nextProps.assignment.details.teacher_comments,
+				pointsPerQuestion: nextProps.assignment.details.question_points
+			})
+	}
+
 	render(){
-
-
+		console.log(this.state)
 		const {assignment_details, questions, details} = this.props.assignment
 		const questionComponents = questions.map((question,index) => {
 			return <InActiveQuestion key={index} 
@@ -90,6 +97,7 @@ function mapDispatchToProps (dispatch){
 			dispatch(getUser(studentId))
 		},
 		grade: (finalParams, issuedAssignmentId) => {
+			finalParams.pointsPerQuestion = finalParams.pointsPerQuestion.map(points => points ? points : 0)
 			return dispatch(finalizeScore(finalParams, issuedAssignmentId))
 		}
 	}

@@ -15,7 +15,7 @@ function assignmentReducer (state = defaultState, action){
 		case "CREATE_NEW_ASSIGNMENT": 
 			return Object.assign({}, state, {allAssignments: [...state.allAssignments, action.payload.assignment]})
 		case "ASSIGN_ASSIGNMENT":
-			return Object.assign({}, state, {allStudentAssignments: [...state.allStudentAssignments, action.payload.assignment]})
+			return Object.assign({}, state, {studentAssignments: [...state.allStudentAssignments, ...action.payload.assignments]})
 		case "GET_SUBMITTED_ASSIGNMENT":
 			return Object.assign({}, state, {currentSubmittedAssignment: action.payload.issued_assignment})
 		case "GET_ALL_ASSIGNMENTS":

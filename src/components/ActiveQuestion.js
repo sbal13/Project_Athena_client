@@ -16,7 +16,7 @@ const ActiveQuestion = ({questionDetails, questionNum, selectedAnswer, over, sel
 
 
 
-	let {question, choices, point_value} = questionDetails
+	let {question, choices} = questionDetails
 	choices = choices || []
 
 	const choiceComponents = choices.map((choice, index)=> {

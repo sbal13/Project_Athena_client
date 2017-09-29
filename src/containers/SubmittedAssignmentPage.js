@@ -34,8 +34,8 @@ class SubmittedAssignmentPage extends React.Component{
 
 	componentWillUpdate(nextProps){
 		const assignmentId = nextProps.location.pathname.split("/")[2]
-		if (this.props.currentSubmittedAssignment.details && this.props.currentSubmittedAssignment.details.id != assignmentId){
-			this.props.getSubmittedAssignment(assignmentId)
+		if (nextProps.currentSubmittedAssignment.details && nextProps.currentSubmittedAssignment.details.id != assignmentId){
+			nextProps.getSubmittedAssignment(assignmentId)
 		}
 	}
 

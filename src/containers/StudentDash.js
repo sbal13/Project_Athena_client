@@ -2,7 +2,7 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {getUserTeachers} from '../actions/users'
 import {getStudentAssignments} from '../actions/assignments'
-import {Grid, Card, Table} from 'semantic-ui-react'
+import {Grid, Card} from 'semantic-ui-react'
 import StudentDashControls from '../components/StudentDashControls'
 import AssignmentTable from '../components/AssignmentTable'
 
@@ -70,7 +70,7 @@ class StudentDash extends React.Component{
 
 		return (
 			<Grid centered columns={2}>
-				<Grid.Column width={3}>
+				<Grid.Column width={5}>
 					<Card fluid>
 						<Card.Header centered>Sort and Filter</Card.Header>
 						<Card.Content>
@@ -84,16 +84,9 @@ class StudentDash extends React.Component{
 					</Card>
 				</Grid.Column>
 				<Grid.Column width={10}>
-					<Grid columns={1}>
-
-						<Grid.Row >
-							<Grid.Column>
-								<Card fluid style={{height: "500px", overflow:"auto"}}>
-									{this.state.loaded ? <AssignmentTable users={this.props.teachers} assignments={assignments} isStudent={true} goToAssignment={this.goToAssignment}/>: null}
-								</Card>
-							</Grid.Column>
-						</Grid.Row>
-					</Grid>
+					<Card fluid style={{height: "500px", overflow:"auto"}}>
+						{this.state.loaded ? <AssignmentTable users={this.props.teachers} assignments={assignments} isStudent={true} goToAssignment={this.goToAssignment}/>: null}
+					</Card>
 				</Grid.Column>
 			</Grid>
 	)}

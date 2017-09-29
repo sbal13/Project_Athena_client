@@ -1,4 +1,4 @@
-export default function authReducer (state={currentUser: {user_type: null},loggedIn:false}, action){
+export default function authReducer (state={currentUser: {},loggedIn:false}, action){
 	switch(action.type){
 		case "LOG_IN":
 			localStorage.setItem('jwt', action.payload.jwt)
