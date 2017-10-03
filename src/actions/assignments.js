@@ -26,6 +26,34 @@ export function newAssignment(assignment, history) {
       })
     }
   }
+export function editAssignment(updatedAssignment, assignmentId, history) {
+    
+    return function(dispatch) {
+      const url = `http://localhost:3000/api/v1/assignment/${assignmentId}/edit`
+
+      const body = JSON.stringify(updatedAssignment)
+      const jwtToken = localStorage.getItem("jwt")
+
+      const headers = {
+        method: 'post',
+        body: body,
+        headers: {
+          "Authorization":`Bearer ${jwtToken}`,
+          "Content-Type":"application/json",
+          "Accept":"application/json"
+        }
+      }
+
+      return fetch(url, headers)
+      .then(res => res.json())
+      .then(json => {
+        if (json.success) {
+          dispatch({type: "EDIT_ASSIGNMENT", payload: json})
+          history.push("/dashboard", json.success)
+        } 
+      })
+    }
+  }
 
 export function getAllAssignments(){
   return function(dispatch) {

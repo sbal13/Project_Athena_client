@@ -1,7 +1,7 @@
 import React from 'react'
 import {Scatter} from 'react-chartjs-2';
 import {Card, Select, Segment, Dropdown} from 'semantic-ui-react'
-import {PERCENT_INTERVAL, SUBJECTS} from '../helpers/constants'
+import {SUBJECTS} from '../helpers/constants'
 import moment from 'moment';
 import DatePicker from 'react-datepicker'
 

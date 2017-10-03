@@ -8,6 +8,7 @@ import NewTestPage from './containers/NewTestPage'
 import ProfilePage from './containers/ProfilePage'
 import CompleteAssignmentPage from './containers/CompleteAssignmentPage'
 import SubmittedAssignmentPage from './containers/SubmittedAssignmentPage'
+import EditAssignmentPage from './containers/EditAssignmentPage'
 import DashboardPage from './containers/DashboardPage'
 import IndexPage from './containers/IndexPage'
 import {getUserData} from './actions/auth'
@@ -41,9 +42,10 @@ class App extends Component {
             <Route exact path="/login" component={LoginPage}/>
             <Route exact path="/dashboard" component={DashboardPage}/>
             <Route exact path="/new-assignment" render={(props) => <NewTestPage {...props} currentUser={this.props.currentUser}/>}/>
-            <Route path="/assignment/:id" component={CompleteAssignmentPage}/>
-            <Route path="/user/:id" component={ProfilePage}/>
-            <Route path="/submitted/:id" component={(props) => <SubmittedAssignmentPage {...props} currentUser={this.props.currentUser}/>}/>
+            <Route exact path="/assignment/:id" component={CompleteAssignmentPage}/>
+            <Route exact path="/assignment/:id/edit" render={(props) => <EditAssignmentPage {...props} currentUser={this.props.currentUser}/>}/>
+            <Route exact path="/user/:id" component={ProfilePage}/>
+            <Route exact path="/submitted/:id" component={(props) => <SubmittedAssignmentPage {...props} currentUser={this.props.currentUser}/>}/>
           </Grid.Column>
         </Grid.Row>
       </Grid>

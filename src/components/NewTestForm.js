@@ -3,7 +3,7 @@ import QuestionRouter from './QuestionRouter'
 import {validateTest} from '../helpers/validateTest'
 import {connect} from 'react-redux'
 import {ASSIGNMENT_TYPES, GRADES, SUBJECTS, QUESTION_TYPES} from '../helpers/constants'
-import {newAssignment} from '../actions/assignments'
+import {newAssignment, getAssignment, editAssignment} from '../actions/assignments'
 import {Form, Grid, Card, Segment, Button, Rating, Label, Select} from 'semantic-ui-react'
 import {alertOptions} from '../helpers/AlertOptions'
 import AlertContainer from 'react-alert'
@@ -22,6 +22,54 @@ class NewTestForm extends React.Component {
 		time: 0,
 		protected: false
 	}
+
+	componentDidMount(){
+		if (this.props.editMode){
+			this.props.getAssignment(this.props.location.pathname.split("/")[2])
+			.then(res => {
+				const loadedDetails = this.props.assignmentToEdit.details
+				const detailsToUpdate = {
+					title: loadedDetails.title,
+					difficulty: loadedDetails.difficulty,
+					subject: loadedDetails.subject,
+					description: loadedDetails.description,
+					assignmentType: loadedDetails.assignment_type,
+					grade: loadedDetails.grade,
+					timed: loadedDetails.timed,
+					time: loadedDetails.time,
+					protected: loadedDetails.protected
+				}
+
+				let loadedQuestions = this.props.assignmentToEdit.questions
+
+				const questionsToUpdate = loadedQuestions.map(question =>{
+					let editableQuestion = null
+
+					switch(question.question_type){
+						case 'multiple choice':
+							editableQuestion = {questionType: "multiple choice", question: question.question, answer: question.answer, points: question.point_value, choices: question.choices}
+							break;
+						case 'open ended':
+							editableQuestion = {questionType: "open ended", question: question.question, points: question.point_value}
+							break;
+						case 'essay':
+							editableQuestion = {questionType: "essay", question: question.question, points: question.point_value}
+							break;
+						default:
+							editableQuestion = null
+							break;
+					}
+
+					return editableQuestion
+				})
+
+				detailsToUpdate.questions = questionsToUpdate
+
+				this.setState(detailsToUpdate)
+			})
+		}
+	}
+
 	addQuestion = () => {
 
 		let question;
@@ -133,6 +181,17 @@ class NewTestForm extends React.Component {
 				this.msg.error(message)
 			})
 		}
+	}	
+
+	editAssignment = () => {
+		const validator = validateTest(this.state)
+		if (validator.length === 0) {
+			this.props.edit(this.state, this.props.assignmentToEdit.details.id, this.props.history)
+		} else {
+			validator.forEach(message => {
+				this.msg.error(message)
+			})
+		}
 	}
 
 	toggleTime = () => {
@@ -156,7 +215,6 @@ class NewTestForm extends React.Component {
 								  />
 
 		})
-		console.log(this.state)
 		return (
 			<Grid relaxed columns={3}>
 				<Grid.Column width={1}/>
@@ -187,17 +245,20 @@ class NewTestForm extends React.Component {
 							<Form.Select options={ASSIGNMENT_TYPES} 
 									placeholder="assignment type"
 									name="assignmentType"
+									value={this.state.assignmentType}
 									fluid
 									onChange={this.handleSelection}/>
 							<Form.Select options={SUBJECTS} 
 									placeholder="subject"
 									name="subject"
 									fluid
+									value={this.state.subject}
 									onChange={this.handleSelection}/>
 							<Form.Select options={GRADES} 
 									placeholder="grade"
 									name="grade"
 									fluid
+									value={this.state.grade}
 									onChange={this.handleSelection}/>
 							
 							</Form>
@@ -216,7 +277,7 @@ class NewTestForm extends React.Component {
 								<Rating maxRating={5} 
 										clearable
 										icon="star"
-										rating={this.state.rating}
+										rating={this.state.difficulty}
 										size="massive"
 										label="difficulty"
 										name="difficulty"
@@ -229,7 +290,7 @@ class NewTestForm extends React.Component {
 									onChange={this.handleSelection}/>
 						</Card.Content>
 						<Button fluid color="teal" onClick={this.addQuestion}>Add Question</Button>
-						<Button fluid color="green" onClick={this.createAssignment}>Create Assignment</Button>
+						{this.props.editMode ? <Button fluid color="green" onClick={this.editAssignment}>Edit Assignment</Button> : <Button fluid color="green" onClick={this.createAssignment}>Create Assignment</Button>}
 					</Card>
 				</Grid.Column>
 				<AlertContainer ref={a => this.msg = a} {...alertOptions} />
@@ -237,7 +298,10 @@ class NewTestForm extends React.Component {
 	)}
 }
 function mapStateToProps(state) {
-	return {user: state.auth.user}
+	return {
+		user: state.auth.user,
+		assignmentToEdit: state.assignment.currentAssignment
+	}
 }
 
 
@@ -245,7 +309,14 @@ function mapDispatchToProps(dispatch){
 	return {
 		create: (assignmentData, history) => {
 			dispatch(newAssignment(assignmentData, history))
+		},
+		edit: (assignmentData, assignmentId, history) => {
+			dispatch(editAssignment(assignmentData, assignmentId, history))
+		},
+		getAssignment: (id) => {
+			return dispatch(getAssignment(id))
 		}
+
 	}
 }	
 
