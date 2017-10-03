@@ -9,6 +9,8 @@ import moment from 'moment';
 import {alertOptions} from '../helpers/AlertOptions'
 import AlertContainer from 'react-alert'
 import BarChart from '../components/BarChart'
+import ScatterChart from '../components/ScatterChart'
+import PolarChart from '../components/PolarChart'
 
 
 
@@ -25,7 +27,7 @@ class TeacherDash extends React.Component{
 		filterByStatus: false,
 		chosenStudents: [],
 		chosenAssignments: [],
-		date: moment()
+		date: moment()	
 	}
 
 	componentDidMount(){
@@ -94,6 +96,49 @@ class TeacherDash extends React.Component{
 		return this.state.filterByStatus || this.state.filterBySubject || this.state.filterByStudent || this.state.filterByAssignment
 	}
 
+	getEarliest = (assignments) =>{
+		let min = null;
+
+		assignments.forEach(assignment => {
+			if (!min){
+				min = assignment.issued_assignments.details.finalized_date
+			} else if (min > assignment.issued_assignments.details.finalized_date){
+				min  = assignment.issued_assignments.details.finalized_date
+			}
+		})
+
+		return moment(min)
+
+
+	}
+	getLatest = (assignments) =>{
+		let max = null
+
+		assignments.forEach(assignment => {
+			if (!max){
+				max = assignment.issued_assignments.details.finalized_date
+			} else if (max < assignment.issued_assignments.details.finalized_date){
+				max  = assignment.issued_assignments.details.finalized_date
+			}
+		})
+
+		return moment(max)
+	}
+
+	getInitialDateRange = (assignments) => {
+		if (assignments.length > 0){
+			const range = {min: this.getEarliest(assignments), max: this.getLatest(assignments)}
+			return range
+		} else {
+			return {min: moment(), max: moment()}
+		}
+
+	}
+
+	isLoaded = () => {
+		return this.props.students.length > 0  && this.props.assignments.length > 0 && this.props.studentAssignments.length > 0
+	}
+
 
 	render(){
 
@@ -101,12 +146,9 @@ class TeacherDash extends React.Component{
 
 		let gradedAssignments = assignments.filter(assignment => assignment.issued_assignments.details.status === "Graded")
 
-		console.log(gradedAssignments)
-
 		if (this.shouldApplyFilter()){
 			assignments = this.applyFilter()
 		}
-
 		return (
 			<Grid centered columns={2}>
 				<Grid.Row>
@@ -136,7 +178,17 @@ class TeacherDash extends React.Component{
 
 				<Grid.Row>
 					<Grid.Column width={12}>
-						<BarChart students={this.props.students} assignments={this.props.assignments} studentAssignments={gradedAssignments}/>
+						{this.isLoaded() ? <BarChart students={this.props.students} assignments={this.props.assignments} studentAssignments={gradedAssignments}/> : null}
+					</Grid.Column>
+				</Grid.Row>
+				<Grid.Row>
+					<Grid.Column width={12}>
+						{this.isLoaded() ? <ScatterChart students={this.props.students} range={this.getInitialDateRange(gradedAssignments)} studentAssignments={gradedAssignments}/> : null}
+					</Grid.Column>
+				</Grid.Row>
+				<Grid.Row>
+					<Grid.Column width={12}>
+						{this.isLoaded() ? <PolarChart students={this.props.students} studentAssignments={gradedAssignments}/> : null}
 					</Grid.Column>
 				</Grid.Row>
 

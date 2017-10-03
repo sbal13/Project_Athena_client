@@ -24,13 +24,22 @@ class ActiveTest extends React.Component {
 	startAssignment = () => {
 		const emptyArray = this.props.assignment.questions.map(q => "")
 
+
 		const completedAssignments = this.props.issuedAssignments.filter(assignment => assignment.issued_assignments.details.status === "Graded" || assignment.issued_assignments.details.status === "Submitted")
-		const found = !!completedAssignments.find(assignment => {
+		const pendingAssignments = this.props.issuedAssignments.filter(assignment => assignment.issued_assignments.details.status === "Pending")
+
+		const alreadyCompleted = !!completedAssignments.find(assignment => {
 			return assignment.issued_assignments.assignment_details.id === this.props.assignment.details.id
 		})
 
-		if (found){
+		const beenAssigned = !!pendingAssignments.find(assignment => {
+			return assignment.issued_assignments.assignment_details.id === this.props.assignment.details.id
+		})
+
+		if (alreadyCompleted){
 			this.msg.info("You've already completed this assignment!")
+		} else if (!beenAssigned && this.isStudent()) {
+			this.msg.info("You have not yet been assigned this assignment!")
 		} else {
 			const shouldStartTimer = this.isTimed() && this.isStudent() ? setInterval(this.tick, 1000) : null
 			this.setState({

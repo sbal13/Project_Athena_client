@@ -32,7 +32,7 @@ export const PERCENT_INTERVAL = [
 		20,
 		25,
 		50
-	].map((interval,index) => ({key: index, value: interval, text: interval}) )
+	].map((interval,index) => ({key: index, value: interval, text: `${interval}%`}) )
 
 export const STATUS_TYPES = [
 		"Pending",

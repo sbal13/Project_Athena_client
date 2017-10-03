@@ -28,7 +28,8 @@ const TeacherDashControls = ({students, assignments, chooseAssignment, chooseStu
 									  closeOnChange={true} 
 									  fluid 
 									  search 
-									  selection 
+									  selection
+									  placeholder ="Filter by student" 
 									  options={studentOptions}/>
 						</Grid.Column>
 					</Grid.Row>
@@ -43,6 +44,7 @@ const TeacherDashControls = ({students, assignments, chooseAssignment, chooseStu
 									  fluid 
 									  search 
 									  selection 
+									  placeholder ="Filter by assignment" 
 									  options={assignmentOptions}/>
 						</Grid.Column>
 					</Grid.Row>
@@ -56,7 +58,8 @@ const TeacherDashControls = ({students, assignments, chooseAssignment, chooseStu
 									  closeOnChange={true} 
 									  fluid 
 									  search 
-									  selection 
+									  selection
+									  placeholder ="Filter by subject"  
 									  options={SUBJECTS}/>								
 						</Grid.Column>
 					</Grid.Row>	
@@ -70,7 +73,8 @@ const TeacherDashControls = ({students, assignments, chooseAssignment, chooseStu
 									  closeOnChange={true} 
 									  fluid 
 									  search 
-									  selection 
+									  selection
+									  placeholder ="Filter by status" 
 									  options={STATUS_TYPES}/>
 						</Grid.Column>
 					</Grid.Row>
@@ -96,7 +100,7 @@ const TeacherDashControls = ({students, assignments, chooseAssignment, chooseStu
 						  options={assignmentOptions}/>
 				<Label size="large">Due Date</Label>
 				<div className="ui input">
-					<DatePicker selected={date} minDate={moment()}onChange={handleDateChange}/>
+					<DatePicker selected={date} minDate={moment()} onChange={handleDateChange}/>
 				</div>
 				<Button fluid color="teal" onClick={assign}>assign</Button>
 			</Segment>
