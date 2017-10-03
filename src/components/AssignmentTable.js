@@ -1,11 +1,17 @@
 import React from 'react'
 import {Table, Button} from 'semantic-ui-react'
 import Moment from 'react-moment';
+import {deleteAssigned} from '../actions/assignments'
 import {Link} from 'react-router-dom'
+import {connect} from 'react-redux'
 
 
-const AssignmentTable = ({assignments, isStudent, users, goToAssignment}) =>{
+const AssignmentTable = ({assignments, isStudent, users, goToAssignment, deleteAssigned}) =>{
 
+	const handleDelete = (event) => {
+		let assignedId = parseInt(event.target.name.split("-")[1],10)
+		deleteAssigned(assignedId)
+	}
 	return(
 			 <Table celled padded>
 			    <Table.Header>
@@ -29,12 +35,13 @@ const AssignmentTable = ({assignments, isStudent, users, goToAssignment}) =>{
 			    		const score = details.status === "Graded" ? `${details.final_score}/${assignment_details.total_points} (${percentage}%)` : "Ungraded"
 			    		
 
-			    		const viewButton =  <Link to={`/submitted/${details.id}`}><Button name={assignment_details.id}>view</Button></Link>
-			    		const finishGradingButton = <Link to={`/submitted/${details.id}`}><Button name={assignment_details.id}>finish grading</Button></Link>
+			    		const viewButton =  <Link to={`/submitted/${details.id}`}><Button fluid color="teal" name={assignment_details.id}>view</Button></Link>
+			    		const finishGradingButton = <Link to={`/submitted/${details.id}`}><Button fluid color="orange" name={assignment_details.id}>finish grading</Button></Link>
 
 			    		const teacherActionsButton = details.status === "Submitted" ? finishGradingButton : viewButton
-			    		const studentActionsButton = details.status === "Pending" ? <Button onClick={goToAssignment} name={assignment_details.id}>do assignment</Button> : viewButton 
-			    		
+			    		const studentActionsButton = details.status === "Pending" ? <Button onClick={goToAssignment} fluid color="teal" name={assignment_details.id}>do assignment</Button> : viewButton 
+			    		const deleteButton = <Button onClick={handleDelete} fluid name={`assigned-${details.id}`}color="red">delete</Button>
+
 			    		let user;
 
 			    		if (isStudent){
@@ -52,7 +59,7 @@ const AssignmentTable = ({assignments, isStudent, users, goToAssignment}) =>{
 						        <Table.Cell><Moment format="MM/DD/YYYY (dddd)" date={details.due_date}/></Table.Cell>
 						        <Table.Cell>{details.status}</Table.Cell>
 						        <Table.Cell>{score}</Table.Cell>
-						        <Table.Cell>{isStudent ? studentActionsButton : teacherActionsButton}</Table.Cell>
+						        <Table.Cell>{isStudent ? studentActionsButton : teacherActionsButton}{isStudent ? null : deleteButton}</Table.Cell>
 					    	</Table.Row>
 					)})}
 			    </Table.Body>
@@ -60,4 +67,12 @@ const AssignmentTable = ({assignments, isStudent, users, goToAssignment}) =>{
 		)
 }
 
-export default AssignmentTable
+function mapDispatchToProps (dispatch){
+	return {
+		deleteAssigned: (assignedId) => {
+			dispatch(deleteAssigned(assignedId))
+		}
+	}
+}
+
+export default connect(null, mapDispatchToProps)(AssignmentTable)

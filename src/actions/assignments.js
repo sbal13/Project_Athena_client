@@ -85,7 +85,7 @@ export function getAssignment(id){
 
 export function copyAssignment(assignmentId){
   return function(dispatch){
-    const url = `http://localhost:3000/api/v1/assignments/${assignmentId}/copy`
+    const url = `http://localhost:3000/api/v1/assignment/${assignmentId}/copy`
     const jwtToken = localStorage.getItem("jwt")
     const headers = {
       method: 'post',
@@ -101,6 +101,52 @@ export function copyAssignment(assignmentId){
     .then(json => {
       if (json.success){
         dispatch({type: "COPY_ASSIGNMENT", payload: json})
+      }
+    })
+  }
+}
+
+export function deleteAssignment(assignmentId){
+  return function(dispatch){
+    const url = `http://localhost:3000/api/v1/assignment/${assignmentId}/delete`
+    const jwtToken = localStorage.getItem("jwt")
+    const headers = {
+      method: 'delete',
+      headers: {
+        "Authorization":`Bearer ${jwtToken}`,
+        "Content-Type":"application/json",
+        "Accept":"application/json"
+      }
+    }
+
+    return fetch(url, headers)
+    .then(res => res.json())
+    .then(json => {
+      if (json.success){
+        dispatch({type: "DELETE_ASSIGNMENT", payload: {id: assignmentId}})
+      }
+    })
+  }
+}
+
+export function deleteAssigned(assignedId){
+  return function(dispatch){
+    const url = `http://localhost:3000/api/v1/assigned/${assignedId}/delete`
+    const jwtToken = localStorage.getItem("jwt")
+    const headers = {
+      method: 'delete',
+      headers: {
+        "Authorization":`Bearer ${jwtToken}`,
+        "Content-Type":"application/json",
+        "Accept":"application/json"
+      }
+    }
+
+    return fetch(url, headers)
+    .then(res => res.json())
+    .then(json => {
+      if (json.success){
+        dispatch({type: "DELETE_ASSIGNED_ASSIGNMENT", payload: {id: assignedId}})
       }
     })
   }

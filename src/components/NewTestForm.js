@@ -27,45 +27,49 @@ class NewTestForm extends React.Component {
 		if (this.props.editMode){
 			this.props.getAssignment(this.props.location.pathname.split("/")[2])
 			.then(res => {
-				const loadedDetails = this.props.assignmentToEdit.details
-				const detailsToUpdate = {
-					title: loadedDetails.title,
-					difficulty: loadedDetails.difficulty,
-					subject: loadedDetails.subject,
-					description: loadedDetails.description,
-					assignmentType: loadedDetails.assignment_type,
-					grade: loadedDetails.grade,
-					timed: loadedDetails.timed,
-					time: loadedDetails.time,
-					protected: loadedDetails.protected
-				}
-
-				let loadedQuestions = this.props.assignmentToEdit.questions
-
-				const questionsToUpdate = loadedQuestions.map(question =>{
-					let editableQuestion = null
-
-					switch(question.question_type){
-						case 'multiple choice':
-							editableQuestion = {questionType: "multiple choice", question: question.question, answer: question.answer, points: question.point_value, choices: question.choices}
-							break;
-						case 'open ended':
-							editableQuestion = {questionType: "open ended", question: question.question, points: question.point_value}
-							break;
-						case 'essay':
-							editableQuestion = {questionType: "essay", question: question.question, points: question.point_value}
-							break;
-						default:
-							editableQuestion = null
-							break;
+				if (this.props.currentUser.id && !this.props.assignmentToEdit.details.historical && this.props.currentUser.id === this.props.assignmentToEdit.details.teacher_id){
+					const loadedDetails = this.props.assignmentToEdit.details
+					const detailsToUpdate = {
+						title: loadedDetails.title,
+						difficulty: loadedDetails.difficulty,
+						subject: loadedDetails.subject,
+						description: loadedDetails.description,
+						assignmentType: loadedDetails.assignment_type,
+						grade: loadedDetails.grade,
+						timed: loadedDetails.timed,
+						time: loadedDetails.time,
+						protected: loadedDetails.protected
 					}
 
-					return editableQuestion
-				})
+					let loadedQuestions = this.props.assignmentToEdit.questions
 
-				detailsToUpdate.questions = questionsToUpdate
+					const questionsToUpdate = loadedQuestions.map(question =>{
+						let editableQuestion = null
 
-				this.setState(detailsToUpdate)
+						switch(question.question_type){
+							case 'multiple choice':
+								editableQuestion = {questionType: "multiple choice", question: question.question, answer: question.answer, points: question.point_value, choices: question.choices}
+								break;
+							case 'open ended':
+								editableQuestion = {questionType: "open ended", question: question.question, points: question.point_value}
+								break;
+							case 'essay':
+								editableQuestion = {questionType: "essay", question: question.question, points: question.point_value}
+								break;
+							default:
+								editableQuestion = null
+								break;
+						}
+
+						return editableQuestion
+					})
+
+					detailsToUpdate.questions = questionsToUpdate
+
+					this.setState(detailsToUpdate)
+				} else {
+					this.props.history.push('/dashboard')
+				}
 			})
 		}
 	}
@@ -299,7 +303,7 @@ class NewTestForm extends React.Component {
 }
 function mapStateToProps(state) {
 	return {
-		user: state.auth.user,
+		currentUser: state.auth.currentUser,
 		assignmentToEdit: state.assignment.currentAssignment
 	}
 }

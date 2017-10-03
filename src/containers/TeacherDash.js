@@ -145,6 +145,10 @@ class TeacherDash extends React.Component{
 		let assignments = this.props.studentAssignments
 
 		let gradedAssignments = assignments.filter(assignment => assignment.issued_assignments.details.status === "Graded")
+		
+		// let nonHistorical = this.props.assignments.filter(assignment => !assignment.details.historical)
+		// let historical = this.props.assignments.filter(assignment => assignment.details.historical)
+
 
 		if (this.shouldApplyFilter()){
 			assignments = this.applyFilter()
