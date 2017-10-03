@@ -3,8 +3,13 @@ import {connect} from 'react-redux'
 import {getUserTeachers} from '../actions/users'
 import {getStudentAssignments} from '../actions/assignments'
 import {Grid, Card} from 'semantic-ui-react'
+import moment from 'moment';
 import StudentDashControls from '../components/StudentDashControls'
 import AssignmentTable from '../components/AssignmentTable'
+import PolarChart from '../components/PolarChart'
+import AssignmentBarChart from '../components/AssignmentBarChart'
+import StudentScatterChart from '../components/StudentScatterChart'
+
 
 class StudentDash extends React.Component{
 
@@ -18,7 +23,7 @@ class StudentDash extends React.Component{
 		loaded: false
 	}
 
-	componentDidMount(){
+	componentWillMount(){
 		this.props.getDashboardInfo(this.props.student.id)
 		.then(res => this.setState({loaded: true}))
 	}
@@ -57,6 +62,50 @@ class StudentDash extends React.Component{
 		return this.state.filterByStatus || this.state.filterBySubject || this.state.filterByTeacher
 	}
 
+	isLoaded = () => {
+		return this.props.teachers.length > 0 && this.props.assignments.length > 0
+	}
+
+	getEarliest = (assignments) =>{
+		let min = null;
+
+		assignments.forEach(assignment => {
+			if (!min){
+				min = assignment.issued_assignments.details.finalized_date
+			} else if (min > assignment.issued_assignments.details.finalized_date){
+				min  = assignment.issued_assignments.details.finalized_date
+			}
+		})
+
+		return moment(min)
+
+
+	}
+	getLatest = (assignments) =>{
+		let max = null
+
+		assignments.forEach(assignment => {
+			if (!max){
+				max = assignment.issued_assignments.details.finalized_date
+			} else if (max < assignment.issued_assignments.details.finalized_date){
+				max  = assignment.issued_assignments.details.finalized_date
+			}
+		})
+
+		return moment(max)
+	}
+
+	getInitialDateRange = (assignments) => {
+		if (assignments.length > 0){
+			const range = {min: this.getEarliest(assignments), max: this.getLatest(assignments)}
+			return range
+		} else {
+			return {min: moment(), max: moment()}
+		}
+
+	}
+
+
 
 	render(){
 
@@ -68,26 +117,46 @@ class StudentDash extends React.Component{
 			assignments = this.applyFilter()
 		}
 
+		let gradedAssignments = this.props.assignments.filter(assignment => assignment.issued_assignments.details.status === "Graded")
+
+
 		return (
 			<Grid centered columns={2}>
-				<Grid.Column width={5}>
-					<Card fluid>
-						<Card.Header centered>Sort and Filter</Card.Header>
-						<Card.Content>
-							<StudentDashControls teachers={this.props.teachers} 
-												 chooseFilter={this.chooseFilter}
-												 toggle={this.toggle}
-												 filterByTeacher= {this.state.filterByTeacher}
-												 filterBySubject= {this.state.filterBySubject}	
-												 filterByStatus= {this.state.filterByStatus}/>
-						</Card.Content>
-					</Card>
-				</Grid.Column>
-				<Grid.Column width={10}>
-					<Card fluid style={{height: "500px", overflow:"auto"}}>
-						{this.state.loaded ? <AssignmentTable users={this.props.teachers} assignments={assignments} isStudent={true} goToAssignment={this.goToAssignment}/>: null}
-					</Card>
-				</Grid.Column>
+				<Grid.Row>
+					<Grid.Column width={5}>
+						<Card fluid>
+							<Card.Header centered>Sort and Filter</Card.Header>
+							<Card.Content>
+								<StudentDashControls teachers={this.props.teachers} 
+													 chooseFilter={this.chooseFilter}
+													 toggle={this.toggle}
+													 filterByTeacher= {this.state.filterByTeacher}
+													 filterBySubject= {this.state.filterBySubject}	
+													 filterByStatus= {this.state.filterByStatus}/>
+							</Card.Content>
+						</Card>
+					</Grid.Column>
+					<Grid.Column width={10}>
+						<Card fluid style={{height: "500px", overflow:"auto"}}>
+							{this.state.loaded ? <AssignmentTable users={this.props.teachers} assignments={assignments} isStudent={true} goToAssignment={this.goToAssignment}/>: null}
+						</Card>
+					</Grid.Column>
+				</Grid.Row>
+				<Grid.Row>
+					<Grid.Column width={12}>
+						{this.isLoaded() ? <AssignmentBarChart teachers={this.props.teachers} assignments={gradedAssignments}/> : null}
+					</Grid.Column>
+				</Grid.Row>
+				<Grid.Row>
+					<Grid.Column width={12}>
+						{this.isLoaded() ? <PolarChart students={[this.props.student]} isStudent={true} studentAssignments={gradedAssignments}/> : null}
+					</Grid.Column>
+				</Grid.Row>
+				<Grid.Row>
+					<Grid.Column width={12}>
+						{this.isLoaded() ? <StudentScatterChart teachers={this.props.teachers} range={this.getInitialDateRange(gradedAssignments)} assignments={gradedAssignments}/> : null}
+					</Grid.Column>
+				</Grid.Row>
 			</Grid>
 	)}
 }

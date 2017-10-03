@@ -78,15 +78,15 @@ class PolarChart extends React.Component{
 
     return (
       <Card fluid>
-        <Segment>
-          <Dropdown onChange={this.handleSelect} 
+        
+          {!this.props.isStudent ? <Segment><Dropdown onChange={this.handleSelect} 
                     name="studentFilter"
                     search 
                     selection 
                     closeOnChange={true}
                     value={this.state.studentFilter} 
-                    options={studentOptions}/>
-        </Segment>
+                    options={studentOptions}/></Segment> : null}
+        
         <Card.Content>
           <Polar
                 data={data}

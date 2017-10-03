@@ -13,7 +13,11 @@ function assignmentReducer (state = defaultState, action){
 			const currentAssignment = {currentAssignment: action.payload.assignment}
 			return Object.assign({}, state, currentAssignment)
 		case "CREATE_NEW_ASSIGNMENT": 
-			return Object.assign({}, state, {allAssignments: [...state.allAssignments, action.payload.assignment]})
+			return Object.assign({}, state, {allAssignments: [...state.allAssignments, action.payload.assignment],
+											 teacherAssignments: [...state.teacherAssignments, action.payload.assignment]})
+		case "COPY_ASSIGNMENT": 
+			return Object.assign({}, state, {allAssignments: [...state.allAssignments, action.payload.assignment],
+											 teacherAssignments: [...state.teacherAssignments, action.payload.assignment]})
 		case "ASSIGN_ASSIGNMENT":
 			return Object.assign({}, state, {studentAssignments: [...state.allStudentAssignments, ...action.payload.assignments]})
 		case "GET_SUBMITTED_ASSIGNMENT":

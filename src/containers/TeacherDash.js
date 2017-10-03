@@ -30,7 +30,7 @@ class TeacherDash extends React.Component{
 		date: moment()	
 	}
 
-	componentDidMount(){
+	componentWillMount(){
 		this.props.getDashboardInfo(this.props.teacher.id)
 	}
 

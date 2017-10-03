@@ -4,7 +4,7 @@ import ActiveQuestion from './ActiveQuestion'
 import ActiveAssignmentDetails from './ActiveAssignmentDetails'
 import Timer from './Timer'
 import {connect} from 'react-redux'
-import {submitAssignment, getStudentAssignments} from '../actions/assignments'
+import {submitAssignment, getStudentAssignments, copyAssignment} from '../actions/assignments'
 import {alertOptions} from '../helpers/AlertOptions'
 import AlertContainer from 'react-alert'
 
@@ -120,6 +120,11 @@ class ActiveTest extends React.Component {
 		clearInterval(this.state.timer)
 	}
 
+	copyAssignment = () => {
+		this.props.copyAssignment(this.props.assignment.details.id)
+		.then(res => this.props.history.push('/dashboard'))
+	}
+
 	render(){
 
 		const {details, questions} = this.props.assignment
@@ -148,7 +153,8 @@ class ActiveTest extends React.Component {
 																	   start={this.startAssignment} 
 																	   started={this.state.started}
 																	   readOnly={!this.isStudent()}
-																	   loaded={this.state.loaded}/>}
+																	   loaded={this.state.loaded}
+																	   copyAssignment={this.copyAssignment}/>}
 
 						{this.state.started && this.isTimed() && this.isStudent() ? <Timer timeRemaining={this.state.timeRemaining}/> : null}
 					</Card.Group>
@@ -190,6 +196,9 @@ function mapDispatchToProps(dispatch){
 		},
 		getAssignments: (studentId) => {
 			return dispatch(getStudentAssignments(studentId))
+		},
+		copyAssignment: (assignmentId) => {
+			return dispatch(copyAssignment(assignmentId))
 		}
 	}
 }

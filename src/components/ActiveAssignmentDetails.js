@@ -1,7 +1,7 @@
 import React from 'react'
 import {Card, Rating, Button} from 'semantic-ui-react'
 
-const ActiveAssignmentDetails = ({details, start, started, openModal, over, seeResults, readOnly, loaded})=>{
+const ActiveAssignmentDetails = ({details, start, started, openModal, over, seeResults, readOnly, loaded, copyAssignment})=>{
 
 	const {description, grade, difficulty, subject, title, time, timed, total_points} = details
 	return (
@@ -17,6 +17,7 @@ const ActiveAssignmentDetails = ({details, start, started, openModal, over, seeR
 			</Card.Content>
 			{started ? <Button color="orange" disabled={over || readOnly} onClick={openModal}>finished!</Button> : <Button onClick={start} disabled={!loaded} color="teal">{readOnly ? "view"  : "start!"}</Button>}
 			{over ? <Button color="teal" onClick={seeResults}>see results</Button> : null}
+			{readOnly ? <Button onClick={copyAssignment} color="orange">copy assignment</Button> : null}
 		</Card>
 	)
 }

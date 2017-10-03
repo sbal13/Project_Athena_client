@@ -18,10 +18,15 @@ class IndexPage extends React.Component {
 
 
 	render(){
+
+		const uniqueAssignments = this.props.allAssignments.filter(assignment => {
+			return assignment.details.creator_id === assignment.details.teacher_id
+		})
+
 		return(
 			<Grid centered columns={2}>
 				<Grid.Column width={10}>
-					{this.props.allAssignments.length > 0 ? <AssignmentList assignments={this.props.allAssignments} history={this.props.history}/> : null}
+					{this.props.allAssignments.length > 0 ? <AssignmentList assignments={uniqueAssignments} history={this.props.history}/> : null}
 				</Grid.Column>
 			</Grid>
 	)}

@@ -55,6 +55,29 @@ export function getAssignment(id){
   }
 }
 
+export function copyAssignment(assignmentId){
+  return function(dispatch){
+    const url = `http://localhost:3000/api/v1/assignments/${assignmentId}/copy`
+    const jwtToken = localStorage.getItem("jwt")
+    const headers = {
+      method: 'post',
+      headers: {
+        "Authorization":`Bearer ${jwtToken}`,
+        "Content-Type":"application/json",
+        "Accept":"application/json"
+      }
+    }
+
+    return fetch(url, headers)
+    .then(res => res.json())
+    .then(json => {
+      if (json.success){
+        dispatch({type: "COPY_ASSIGNMENT", payload: json})
+      }
+    })
+  }
+}
+
 export function submitAssignment(answers, assignmentId){
   return function(dispatch){
     const url = `http://localhost:3000/api/v1/submitassignment/${assignmentId}`
