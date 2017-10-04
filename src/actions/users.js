@@ -1,6 +1,6 @@
 export function addTeacher(teacherKey){
 	return function(dispatch) {
-      const url = 'http://localhost:3000/api/v1/addteacher'
+      const url = 'https://athena-academics-api.herokuapp.com/addteacher'
 
       const body = JSON.stringify({teacher_key: teacherKey})
       const jwtToken = localStorage.getItem("jwt")
@@ -31,7 +31,7 @@ export function addTeacher(teacherKey){
 
 export function getUser(id){
   return function(dispatch){
-    const url = `http://localhost:3000/api/v1/users/${id}`
+    const url = `https://athena-academics-api.herokuapp.com/users/${id}`
     
     return fetch(url)
     .then(res => res.json())
@@ -45,7 +45,7 @@ export function getUser(id){
 
 export function getUserTeachers(studentId){
   return function(dispatch){
-    const url = `http://localhost:3000/api/v1/users/${studentId}/teachers`
+    const url = `https://athena-academics-api.herokuapp.com/users/${studentId}/teachers`
     
     return fetch(url)
     .then(res => res.json())
@@ -59,7 +59,7 @@ export function getUserTeachers(studentId){
 
 export function getUserStudents(teacherId){
   return function(dispatch){
-    const url = `http://localhost:3000/api/v1/users/${teacherId}/students`
+    const url = `https://athena-academics-api.herokuapp.com/users/${teacherId}/students`
     
     return fetch(url)
     .then(res => res.json())

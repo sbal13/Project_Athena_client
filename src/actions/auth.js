@@ -1,7 +1,7 @@
 export function login(userData, history) {
     
     return function(dispatch) {
-      const url = 'http://localhost:3000/api/v1/login'
+      const url = 'https://athena-academics-api.herokuapp.com/login'
 
       const body = JSON.stringify(userData)
 
@@ -30,7 +30,7 @@ export function login(userData, history) {
 export function signup(userData, history) {
  	
     return function(dispatch) {
-      const url = 'http://localhost:3000/api/v1/signup'
+      const url = 'https://athena-academics-api.herokuapp.com/signup'
 
       const body = JSON.stringify(userData)
 
@@ -60,7 +60,7 @@ export function getUserData(jwt){
 
   
     return function(dispatch) {
-      const url = 'http://localhost:3000/api/v1/getcurrentuser'
+      const url = 'https://athena-academics-api.herokuapp.com/getcurrentuser'
 
       const headers = {
         method: 'get',
