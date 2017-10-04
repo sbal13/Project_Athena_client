@@ -40,7 +40,7 @@ class SubmittedAssignmentPage extends React.Component{
 	}
 
 	render(){
-		console.log("Rendering...")
+		console.log(this.props)
 		return this.props.currentSubmittedAssignment.details ? <ViewAndGrade currentUser={this.props.currentUser} 
 																			  isTeacher={this.state.isTeacher} 
 																			  history={this.props.history}

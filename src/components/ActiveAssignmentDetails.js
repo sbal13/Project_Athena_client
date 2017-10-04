@@ -3,7 +3,7 @@ import {Card, Rating, Form, Segment} from 'semantic-ui-react'
 
 const ActiveAssignmentDetails = ({details, start, started, openModal, over, seeResults, readOnly, loaded, copyAssignment})=>{
 
-	const {description, grade, difficulty, subject, title, time, timed, total_points} = details
+	const {grade, difficulty, subject, title, time, timed, total_points} = details
 	return (
 		<Card>
 			<Card.Header textAlign="center"><h4>{title}</h4></Card.Header>

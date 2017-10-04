@@ -13,15 +13,22 @@ const AssignmentList = ({assignments, history})=>{
 	}
 
 	const assignmentComponents = assignments.map((assignment, index) => {
-		return {
-			key: `${index}`,
-			title: assignment.details.historical ? assignment.details.title + ` (HISTORICAL ${moment(assignment.details.created_at).format("MM/DD/YYYY")})`: assignment.details.title,
-			content: <AssignmentItem details={assignment.details} creator={assignment.creator} visitAssignment={visitAssignment} />
-		}
+
+
+		return (
+			[<Accordion.Title key={`title-${index}`} style={index%2===0 ? {backgroundColor: "rgba(200,200,200,0.2)"} : {backgroundColor: "white"}}>
+				{assignment.details.historical ? assignment.details.title + ` (HISTORICAL ${moment(assignment.details.created_at).format("MM/DD/YYYY")})`: assignment.details.title}
+			</Accordion.Title>,
+			<Accordion.Content key={`content-${index}`} style={index%2===0 ? {backgroundColor: "rgba(200,200,200,0.2)"} : {backgroundColor: "white"}}>
+				<AssignmentItem details={assignment.details} creator={assignment.creator} visitAssignment={visitAssignment} />
+			</Accordion.Content>]
+		)
 	})
 
 	return(
-		<Accordion fluid styled panels={assignmentComponents}/>
+		<Accordion fluid styled>
+			{assignmentComponents}
+		</Accordion>
 	)
 }
 

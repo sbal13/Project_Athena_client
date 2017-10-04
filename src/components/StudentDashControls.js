@@ -1,5 +1,5 @@
 import React from 'react'
-import {Dropdown, Button, Grid} from 'semantic-ui-react'
+import {Dropdown, Grid} from 'semantic-ui-react'
 import {SUBJECTS, STATUS_TYPES} from '../helpers/constants'
 import Toggle from 'react-toggle'
 

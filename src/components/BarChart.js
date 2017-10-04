@@ -78,6 +78,9 @@ class BarChart extends React.Component {
 		const borderColorString = `rgba(${color1},${color2},${color3},1)`
 		const fillColorString = `rgba(${color1},${color2},${color3},0.5)`
 
+		const hoverBorderColorString = `rgba(${color1},${color2},${color3},1)`
+		const hoverFillColorString = `rgba(${color1},${color2},${color3},0.6)`
+
 
 		const data = {
 		  labels: labels,
@@ -87,8 +90,8 @@ class BarChart extends React.Component {
 		      backgroundColor: fillColorString,
 		      borderColor: borderColorString,
 		      borderWidth: 1,
-		      hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-		      hoverBorderColor: 'rgba(255,99,132,1)',
+		      hoverBackgroundColor: hoverFillColorString,
+		      hoverBorderColor: hoverBorderColorString,
 		      data: dataPoints
 		    }
 		  ]

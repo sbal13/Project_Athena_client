@@ -1,6 +1,6 @@
 import React from 'react'
 import {Bar} from 'react-chartjs-2';
-import {Card, Select,Segment, Dropdown} from 'semantic-ui-react'
+import {Card, Select, Segment, Dropdown} from 'semantic-ui-react'
 import {PERCENT_INTERVAL, SUBJECTS} from '../helpers/constants'
 
 
@@ -70,16 +70,26 @@ class AssignmentBarChart extends React.Component {
 
 		const {labels, dataPoints} = this.generateAllData(filteredAssignments)
 
+		const color1 = Math.round(Math.random() * 255)
+		const color2 = Math.round(Math.random() * 255)
+		const color3 = Math.round(Math.random() * 255)
+
+		const borderColorString = `rgba(${color1},${color2},${color3},1)`
+		const fillColorString = `rgba(${color1},${color2},${color3},0.5)`
+
+		const hoverBorderColorString = `rgba(${color1},${color2},${color3},1)`
+		const hoverFillColorString = `rgba(${color1},${color2},${color3},0.6)`
+
 		const data = {
 		  labels: labels,
 		  datasets: [
 		    {
 		      label: this.state.subjectFilter,
-		      backgroundColor: 'rgba(255,99,132,0.2)',
-		      borderColor: 'rgba(255,99,132,1)',
+		      backgroundColor: fillColorString,
+		      borderColor: borderColorString,
 		      borderWidth: 1,
-		      hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-		      hoverBorderColor: 'rgba(255,99,132,1)',
+		      hoverBackgroundColor: hoverFillColorString,
+		      hoverBorderColor: hoverBorderColorString,
 		      data: dataPoints
 		    }
 		  ]

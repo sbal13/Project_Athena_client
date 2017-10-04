@@ -15,6 +15,7 @@ class CompleteAssignmentPage extends React.Component{
 	}
 
 	render(){
+		console.log(this.props.assignment)
 		return Object.keys(this.props.assignment).length > 0 ? <ActiveTest history={this.props.history} assignment={this.props.assignment}/> : null
 	}
 }

@@ -1,5 +1,5 @@
 import React from  'react'
-import {Card, Segment, Select, Grid, Input} from 'semantic-ui-react'
+import {Card, Select, Grid, Input} from 'semantic-ui-react'
 import Toggle from 'react-toggle'
 import {SUBJECTS, GRADES} from '../helpers/constants'
 

@@ -50,8 +50,11 @@ const AssignmentTable = ({assignments, isStudent, users, goToAssignment, deleteA
 			    		} else {
 			    			user = users.find(user => user.id === details.student_id)
 			    		}
+
+			    		const color = index%2===0 ?  "rgba(200,200,200,0.2)" : "white"
+			    		
 				    	return(
-					    	<Table.Row key={index}>
+					    	<Table.Row key={index} style={{backgroundColor: color}}>
 						        <Table.Cell><Link to={`user/${user.id}`}>{user.username}</Link></Table.Cell>
 						        <Table.Cell>{(assignment_details.historical && !isStudent ? assignment_details.title + ` (ARCHIVED ${moment(assignment_details.created_at).format("MM/DD/YYYY")})` : assignment_details.title)}</Table.Cell>
 						        <Table.Cell>{assignment_details.subject}</Table.Cell>
