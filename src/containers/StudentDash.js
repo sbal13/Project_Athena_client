@@ -9,6 +9,7 @@ import AssignmentTable from '../components/AssignmentTable'
 import PolarChart from '../components/PolarChart'
 import AssignmentBarChart from '../components/AssignmentBarChart'
 import StudentScatterChart from '../components/StudentScatterChart'
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 
 class StudentDash extends React.Component{
@@ -26,6 +27,12 @@ class StudentDash extends React.Component{
 	componentWillMount(){
 		this.props.getDashboardInfo(this.props.student.id)
 		.then(res => this.setState({loaded: true}))
+	}
+	componentWillReceiveProps(nextProps){
+		if (this.props.student.id !== nextProps.student.id){
+			this.props.getDashboardInfo(this.props.student.id)
+			.then(res => this.setState({loaded: true}))
+		}
 	}
 
 	chooseFilter = (event, data) => {
@@ -108,24 +115,21 @@ class StudentDash extends React.Component{
 
 
 	render(){
-
-		console.log(this.props)
-
 		let assignments = this.props.assignments
 
 		if (this.shouldApplyFilter()){
 			assignments = this.applyFilter()
 		}
 
-		let gradedAssignments = this.props.assignments.filter(assignment => assignment.issued_assignments.details.status === "Graded")
+		let gradedAssignments = Object.keys(this.props.assignments).length > 0 ?this.props.assignments.filter(assignment => assignment.issued_assignments.details.status === "Graded") : []
 
 
 		return (
 			<Grid centered columns={2}>
 				<Grid.Row>
-					<Grid.Column width={5}>
+					<Grid.Column width={3}>
 						<Card fluid>
-							<Card.Header centered>Sort and Filter</Card.Header>
+							<Card.Header textAlign="center"><h3>Sort and Filter</h3></Card.Header>
 							<Card.Content>
 								<StudentDashControls teachers={this.props.teachers} 
 													 chooseFilter={this.chooseFilter}
@@ -136,7 +140,7 @@ class StudentDash extends React.Component{
 							</Card.Content>
 						</Card>
 					</Grid.Column>
-					<Grid.Column width={10}>
+					<Grid.Column width={12}>
 						<Card fluid style={{height: "500px", overflow:"auto"}}>
 							{this.state.loaded ? <AssignmentTable users={this.props.teachers} assignments={assignments} isStudent={true} goToAssignment={this.goToAssignment}/>: null}
 						</Card>
@@ -144,19 +148,25 @@ class StudentDash extends React.Component{
 				</Grid.Row>
 				<Grid.Row>
 					<Grid.Column width={12}>
-						{this.isLoaded() ? <AssignmentBarChart teachers={this.props.teachers} assignments={gradedAssignments}/> : null}
+						<Tabs>
+							<TabList>
+								<Tab>Average Performance</Tab>
+								<Tab>Overall Performance</Tab>
+								<Tab>Performance Over Time</Tab>
+							</TabList>
+							<TabPanel>
+								<PolarChart students={[this.props.student]} isStudent={true} studentAssignments={gradedAssignments}/>
+							</TabPanel>
+							<TabPanel>
+								<AssignmentBarChart teachers={this.props.teachers} assignments={gradedAssignments}/>
+							</TabPanel>
+							<TabPanel>
+								<StudentScatterChart teachers={this.props.teachers} range={this.getInitialDateRange(gradedAssignments)} assignments={gradedAssignments}/>
+							</TabPanel>
+						</Tabs>
 					</Grid.Column>
 				</Grid.Row>
-				<Grid.Row>
-					<Grid.Column width={12}>
-						{this.isLoaded() ? <PolarChart students={[this.props.student]} isStudent={true} studentAssignments={gradedAssignments}/> : null}
-					</Grid.Column>
-				</Grid.Row>
-				<Grid.Row>
-					<Grid.Column width={12}>
-						{this.isLoaded() ? <StudentScatterChart teachers={this.props.teachers} range={this.getInitialDateRange(gradedAssignments)} assignments={gradedAssignments}/> : null}
-					</Grid.Column>
-				</Grid.Row>
+
 			</Grid>
 	)}
 }

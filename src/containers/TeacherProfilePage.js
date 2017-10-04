@@ -1,12 +1,14 @@
 import React from 'react';
-import {Grid, Card, Segment} from 'semantic-ui-react'
+import {Grid, Card, Segment, Button} from 'semantic-ui-react'
 import AssignmentList from '../components/AssignmentList'
 import {connect} from 'react-redux'
 import {getTeacherAssignments} from '../actions/assignments'
 
 class TeacherProfilePage extends React.Component {
 
-	
+	state = {
+		revealKey: false
+	}
 
 	componentWillMount(){
 		this.props.getTeacherAssignments(this.props.teacher.id)
@@ -17,15 +19,17 @@ class TeacherProfilePage extends React.Component {
 			this.props.getTeacherAssignments(nextProps.teacher.id)
 		}
 	}
-
+	reveal = () => {
+		this.setState({revealKey: !this.state.revealKey})
+	}
 
 	render(){
 		const {description, username, email, subjects,first_name, last_name} = this.props.teacher
 		return (
 			<Grid centered columns={2}>
 				<Grid.Column width={4}>
-					<Card style={{position: "fixed", top: "20%"}}>
-						<Card.Header as="h3" textAlign="center">Teacher Profile</Card.Header>
+					<Card fluid>
+						<Card.Header textAlign="center"><h3>Teacher Profile</h3></Card.Header>
 						<Card.Content>
 							<p>Username: {username}</p>
 							<p>Name: {first_name + " " + last_name}</p>
@@ -34,24 +38,22 @@ class TeacherProfilePage extends React.Component {
 							<h4>About me:</h4>
 							<Segment>
 								<p>{description}</p>
-								<p>I teach: {subjects.join(", ")}</p>
+								<p><strong>I teach: </strong>{subjects.join(", ")}</p>
 							</Segment>
+							{this.props.currentUser.id === this.props.teacher.id ? <Button onClick={this.reveal} fluid color="orange">{this.state.revealKey ? "Hide" : "Reveal"} Teacher Key</Button> : null}
+							{this.state.revealKey ? <Segment><h3>{this.props.teacher.teacher_key}</h3></Segment> : null}
 						</Card.Content>
 					</Card>
 				</Grid.Column>
 				<Grid.Column width={10}>
 					<Grid columns={1}>
-						<Grid.Row>
-							<Grid.Column>
-								<Segment style={{height: "100px"}}>
-
-								</Segment>
-							</Grid.Column>
-						</Grid.Row>
 						<Grid.Row >
 							<Grid.Column>
 								<Card fluid style={{height: "400px", overflow:"auto"}}>
-									{this.props.teacherAssignments.length > 0 ? <AssignmentList history={this.props.history} assignments={this.props.teacherAssignments}/> : null}
+									<Card.Header textAlign="center"><h3>Assignments owned by this teacher</h3></Card.Header>
+									<Card.Content>
+										{this.props.teacherAssignments.length > 0 ? <AssignmentList history={this.props.history} assignments={this.props.teacherAssignments}/> : null}
+									</Card.Content>
 								</Card>
 							</Grid.Column>
 						</Grid.Row>
@@ -63,6 +65,7 @@ class TeacherProfilePage extends React.Component {
 
 function mapStateToProps(state){
 	return{
+		currentUser: state.auth.currentUser,
 		teacherAssignments: state.assignment.teacherAssignments
 	}
 }

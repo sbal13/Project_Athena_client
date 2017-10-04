@@ -25,14 +25,16 @@ function assignmentReducer (state = defaultState, action){
 			const teacherCopy = state.teacherAssignments.slice()
 			teacherCopy[teacherIndex] = action.payload.edited_assignment
 
-
-			return Object.assign({}, state, {allAssignments: [...allCopy, action.payload.historical_assignment],
-											 teacherAssignments: [...teacherCopy, action.payload.historical_assignment]})
-		
+			if (action.payload.historical_assignment) {
+				return Object.assign({}, state, {allAssignments: [...allCopy, action.payload.historical_assignment],
+												 teacherAssignments: [...teacherCopy, action.payload.historical_assignment]})
+			} else {
+				return Object.assign({}, state, {allAssignments: allCopy,
+												teacherAssignments: teacherCopy})
+			}
+				
 		case "DELETE_ASSIGNED_ASSIGNMENT": 
-			console.log(state.allStudentAssignments)
 			let newAllStudentAssignments = state.allStudentAssignments.filter(assignment => assignment.issued_assignments.details.id !== action.payload.id)
-			console.log(newAllStudentAssignments)
 			return Object.assign({}, state, {allStudentAssignments: newAllStudentAssignments})
 		case "DELETE_ASSIGNMENT": 
 			let newAllStudent = state.allStudentAssignments.filter(assignment => assignment.issued_assignments.assignment_details.id !== action.payload.id)
@@ -45,7 +47,7 @@ function assignmentReducer (state = defaultState, action){
 			return Object.assign({}, state, {allAssignments: [...state.allAssignments, action.payload.assignment],
 											 teacherAssignments: [...state.teacherAssignments, action.payload.assignment]})
 		case "ASSIGN_ASSIGNMENT":
-			return Object.assign({}, state, {studentAssignments: [...state.allStudentAssignments, ...action.payload.assignments]})
+			return Object.assign({}, state, {allStudentAssignments: [...state.allStudentAssignments, ...action.payload.assignments]})
 		case "GET_SUBMITTED_ASSIGNMENT":
 			return Object.assign({}, state, {currentSubmittedAssignment: action.payload.issued_assignment})
 		case "GET_ALL_ASSIGNMENTS":

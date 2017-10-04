@@ -22,10 +22,12 @@ class ProfilePage extends React.Component {
 
 	render(){
 		let profileType = null;
-		if (this.props.user && this.props.user.user_type === "teacher") {
-			profileType = <TeacherProfilePage history={this.props.history} teacher={this.props.user}/>
-		} else if (this.props.user && this.props.user.user_type === "student") {
-			profileType = <StudentProfilePage history={this.props.history} student={this.props.user} />
+		if (this.props.user.id === parseInt(this.props.location.pathname.split("/")[2],10)){
+			if (this.props.user && this.props.user.user_type === "teacher") {
+				profileType = <TeacherProfilePage history={this.props.history} teacher={this.props.user}/>
+			} else if (this.props.user && this.props.user.user_type === "student") {
+				profileType = <StudentProfilePage history={this.props.history} student={this.props.user} />
+			}
 		}
 
 		return profileType

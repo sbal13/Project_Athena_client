@@ -122,7 +122,7 @@ class ActiveTest extends React.Component {
 
 	copyAssignment = () => {
 		this.props.copyAssignment(this.props.assignment.details.id)
-		.then(res => this.props.history.push('/dashboard'))
+		.then(res => this.props.history.push(`/user/${this.props.currentUser.id}`))
 	}
 
 	render(){
@@ -143,7 +143,7 @@ class ActiveTest extends React.Component {
 					}) : null }
 				</Grid.Column>
 				<Grid.Column width={4}>
-					<Card.Group style={{position: "fixed", top: "10%"}}>
+					<Card.Group style={{position: "fixed"}}>
 						{!details ? <Card/> : <ActiveAssignmentDetails details={details} 
 																	   seeResults = {this.seeResults} 
 																	   openModal={this.openModal} 

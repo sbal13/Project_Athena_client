@@ -86,9 +86,8 @@ class NavBar extends React.Component {
 						   onChange={this.handleChange}/>
 				</Modal.Content>
 				<Modal.Actions>
-					
 					<Button positive onClick={this.addTeacher} content='add teacher' />
-					<Button negative onClick={this.closeModal}>nevermind</Button>
+					<Button negative onClick={this.closeModal} content='nevermind'/>
 				</Modal.Actions>
 			</Modal>
 		</div>

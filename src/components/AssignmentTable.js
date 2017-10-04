@@ -4,6 +4,7 @@ import Moment from 'react-moment';
 import {deleteAssigned} from '../actions/assignments'
 import {Link} from 'react-router-dom'
 import {connect} from 'react-redux'
+import moment from 'moment'
 
 
 const AssignmentTable = ({assignments, isStudent, users, goToAssignment, deleteAssigned}) =>{
@@ -39,7 +40,7 @@ const AssignmentTable = ({assignments, isStudent, users, goToAssignment, deleteA
 			    		const finishGradingButton = <Link to={`/submitted/${details.id}`}><Button fluid color="orange" name={assignment_details.id}>finish grading</Button></Link>
 
 			    		const teacherActionsButton = details.status === "Submitted" ? finishGradingButton : viewButton
-			    		const studentActionsButton = details.status === "Pending" ? <Button onClick={goToAssignment} fluid color="teal" name={assignment_details.id}>do assignment</Button> : viewButton 
+			    		const studentActionsButton = details.status === "Pending" ? <Button onClick={goToAssignment} fluid color="orange" name={assignment_details.id}>do assignment</Button> : viewButton 
 			    		const deleteButton = <Button onClick={handleDelete} fluid name={`assigned-${details.id}`}color="red">delete</Button>
 
 			    		let user;
@@ -52,7 +53,7 @@ const AssignmentTable = ({assignments, isStudent, users, goToAssignment, deleteA
 				    	return(
 					    	<Table.Row key={index}>
 						        <Table.Cell><Link to={`user/${user.id}`}>{user.username}</Link></Table.Cell>
-						        <Table.Cell>{assignment_details.title}</Table.Cell>
+						        <Table.Cell>{(assignment_details.historical && !isStudent ? assignment_details.title + ` (ARCHIVED ${moment(assignment_details.created_at).format("MM/DD/YYYY")})` : assignment_details.title)}</Table.Cell>
 						        <Table.Cell>{assignment_details.subject}</Table.Cell>
 						        <Table.Cell>{assignment_details.assignment_type}</Table.Cell>
 						        <Table.Cell><Moment format="MM/DD/YYYY (dddd)" date={details.assigned_date}/></Table.Cell>

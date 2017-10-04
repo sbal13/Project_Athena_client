@@ -13,6 +13,8 @@ import { Provider } from 'react-redux'
 import { createStore, applyMiddleware, combineReducers } from 'redux'
 import 'react-datepicker/dist/react-datepicker.css'
 import 'react-datepicker/dist/react-datepicker-cssmodules.css'
+import 'react-tabs/style/react-tabs.css';
+
 
 const rootReducer = combineReducers({auth:authReducer, assignment:assignmentReducer, user:userReducer})
 

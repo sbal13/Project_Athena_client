@@ -1,23 +1,26 @@
 import React from 'react'
-import {Card, Rating, Button} from 'semantic-ui-react'
+import {Card, Rating, Form, Segment} from 'semantic-ui-react'
 
 const ActiveAssignmentDetails = ({details, start, started, openModal, over, seeResults, readOnly, loaded, copyAssignment})=>{
 
 	const {description, grade, difficulty, subject, title, time, timed, total_points} = details
 	return (
 		<Card>
-			<Card.Header>{title}</Card.Header>
+			<Card.Header textAlign="center"><h4>{title}</h4></Card.Header>
 			<Card.Content>
-				<p>Description: {description}</p>
-				<p>Grade level: {grade}</p>
-				<p>Subject: {subject}</p>
-				<p>Total time: {timed ? `${time} minutes` : "Untimed"}</p>
-				<p>Total points: {total_points} points</p>
-				<p>Difficulty: </p><Rating icon='star' disabled defaultRating={difficulty} maxRating={5} />
+				<p><strong>Grade level: </strong>{grade}</p>
+				<p><strong>Subject: </strong>{subject}</p>
+				<p><strong>Total time: </strong>{timed ? `${time} minutes` : "Untimed"}</p>
+				<p><strong>Total points: </strong>{total_points} points</p>
+				<p><strong>Difficulty: </strong><Rating icon='star' disabled defaultRating={difficulty} maxRating={5} /></p>
+				<Segment>
+					<Form>
+						{started ? <Form.Button fluid color="orange" disabled={over || readOnly} onClick={openModal}>submit</Form.Button> : <Form.Button onClick={start} disabled={!loaded} fluid color="teal">{readOnly ? "view"  : "start"}</Form.Button>}
+						{over ? <Form.Button fluid color="teal" onClick={seeResults}>see results</Form.Button> : null}
+						{readOnly ? <Form.Button onClick={copyAssignment} fluid color="orange">copy assignment</Form.Button> : null}
+					</Form>
+				</Segment>
 			</Card.Content>
-			{started ? <Button color="orange" disabled={over || readOnly} onClick={openModal}>finished!</Button> : <Button onClick={start} disabled={!loaded} color="teal">{readOnly ? "view"  : "start!"}</Button>}
-			{over ? <Button color="teal" onClick={seeResults}>see results</Button> : null}
-			{readOnly ? <Button onClick={copyAssignment} color="orange">copy assignment</Button> : null}
 		</Card>
 	)
 }

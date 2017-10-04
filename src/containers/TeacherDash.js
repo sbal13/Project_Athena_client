@@ -11,6 +11,7 @@ import AlertContainer from 'react-alert'
 import BarChart from '../components/BarChart'
 import ScatterChart from '../components/ScatterChart'
 import PolarChart from '../components/PolarChart'
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 
 
@@ -33,6 +34,13 @@ class TeacherDash extends React.Component{
 	componentWillMount(){
 		this.props.getDashboardInfo(this.props.teacher.id)
 	}
+
+	componentWillReceiveProps(nextProps){
+		if (this.props.teacher.id !== nextProps.teacher.id){
+			this.props.getDashboardInfo(this.props.teacher.id)
+		}
+	}
+
 
 	chooseStudent = (event, data) => {
 		this.setState({chosenStudents: data.value})
@@ -153,10 +161,11 @@ class TeacherDash extends React.Component{
 		if (this.shouldApplyFilter()){
 			assignments = this.applyFilter()
 		}
+
 		return (
 			<Grid centered columns={2}>
 				<Grid.Row>
-					<Grid.Column width={5}>
+					<Grid.Column width={3}>
 						<Card fluid>
 							<TeacherDashControls date={this.state.date} 
 												 handleDateChange={this.handleDateChange} 
@@ -173,26 +182,31 @@ class TeacherDash extends React.Component{
 												 filterByStatus= {this.state.filterByStatus}/>
 						</Card>
 					</Grid.Column>
-					<Grid.Column width={10}>
-						<Card fluid style={{height: "500px", overflow:"auto"}}>
-							<AssignmentTable users={this.props.students} assignments={assignments}/>
+					<Grid.Column width={12}>
+						<Card fluid style={{height: "524px", overflow:"auto"}}>
+							{this.isLoaded() ? <AssignmentTable users={this.props.students} assignments={assignments}/> : null}
 						</Card>
 					</Grid.Column>
 				</Grid.Row>
 
 				<Grid.Row>
 					<Grid.Column width={12}>
-						{this.isLoaded() ? <BarChart students={this.props.students} assignments={this.props.assignments} studentAssignments={gradedAssignments}/> : null}
-					</Grid.Column>
-				</Grid.Row>
-				<Grid.Row>
-					<Grid.Column width={12}>
-						{this.isLoaded() ? <ScatterChart students={this.props.students} range={this.getInitialDateRange(gradedAssignments)} studentAssignments={gradedAssignments}/> : null}
-					</Grid.Column>
-				</Grid.Row>
-				<Grid.Row>
-					<Grid.Column width={12}>
-						{this.isLoaded() ? <PolarChart students={this.props.students} studentAssignments={gradedAssignments}/> : null}
+						<Tabs>
+							<TabList>
+								<Tab>Overall Performance</Tab>
+								<Tab>Performance Over Time</Tab>
+								<Tab>Student Average Performance</Tab>
+							</TabList>
+							<TabPanel>
+								<BarChart students={this.props.students} assignments={this.props.assignments} studentAssignments={gradedAssignments}/>
+							</TabPanel>
+							<TabPanel>
+								<ScatterChart students={this.props.students} range={this.getInitialDateRange(gradedAssignments)} studentAssignments={gradedAssignments}/>
+							</TabPanel>
+							<TabPanel>
+								<PolarChart students={this.props.students} studentAssignments={gradedAssignments}/>
+							</TabPanel>
+						</Tabs>
 					</Grid.Column>
 				</Grid.Row>
 

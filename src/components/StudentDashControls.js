@@ -1,6 +1,7 @@
 import React from 'react'
 import {Dropdown, Button, Grid} from 'semantic-ui-react'
 import {SUBJECTS, STATUS_TYPES} from '../helpers/constants'
+import Toggle from 'react-toggle'
 
 
 const StudentDashControls = ({teachers, chooseFilter, toggle, filterByTeacher, filterBySubject,filterByStatus}) => {
@@ -14,44 +15,59 @@ const StudentDashControls = ({teachers, chooseFilter, toggle, filterByTeacher, f
 	return(
 		<Grid columns={2}>
 			<Grid.Row>
-				<Grid.Column width={6}> 
-					<Button fluid toggle active={filterByTeacher} name="filterByTeacher" onClick={handleToggle}>Teacher</Button>
+				<Grid.Column verticalAlign="middle" width={3}> 
+					<Toggle checked={filterByTeacher}
+							icons={false}
+							name='filterByTeacher'
+							onChange={handleToggle}/>
 				</Grid.Column>
-				<Grid.Column width={10}>
+				<Grid.Column width={13}>
 					<Dropdown onChange={chooseFilter} 
 							  name="teacherFilter"
 							  closeOnChange={true} 
 							  fluid 
 							  search 
-							  selection 
+							  selection
+							  disabled={!filterByTeacher}
+							  placeholder="Filter by teacher" 
 							  options={teacherOptions}/>
 				</Grid.Column>
 			</Grid.Row>
 			<Grid.Row>
-				<Grid.Column width={6}> 
-					<Button fluid toggle active={filterBySubject} name="filterBySubject" onClick={handleToggle}>Subject</Button>
+				<Grid.Column verticalAlign="middle" width={3}> 
+					<Toggle checked={filterBySubject}
+							icons={false}
+							name='filterBySubject'
+							onChange={handleToggle}/>
 				</Grid.Column>
-				<Grid.Column width={10}>
+				<Grid.Column width={13}>
 					<Dropdown onChange={chooseFilter} 
 							  name="subjectFilter"
 							  closeOnChange={true} 
 							  fluid 
 							  search 
-							  selection 
+							  selection
+							  disabled={!filterBySubject} 
+							  placeholder="Filter by subject" 
 							  options={SUBJECTS}/>								
 				</Grid.Column>
 			</Grid.Row>	
 			<Grid.Row>
-				<Grid.Column width={6}> 
-					<Button fluid toggle active={filterByStatus} name="filterByStatus" onClick={handleToggle}>Status</Button>
+				<Grid.Column verticalAlign="middle" width={3}> 
+					<Toggle checked={filterByStatus}
+							icons={false}
+							name='filterByStatus'
+							onChange={handleToggle}/>
 				</Grid.Column>
-				<Grid.Column width={10}>
+				<Grid.Column width={13}>
 					<Dropdown onChange={chooseFilter} 
 					      	  name="statusFilter"
 							  closeOnChange={true} 
 							  fluid 
 							  search 
-							  selection 
+							  selection
+							  disabled={!filterByStatus}
+							  placeholder="Filter by status" 
 							  options={STATUS_TYPES}/>
 				</Grid.Column>
 			</Grid.Row>

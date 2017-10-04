@@ -26,10 +26,8 @@ class StudentProfilePage extends React.Component {
 		return (
 			<Grid centered columns={2}>
 				<Grid.Column width={4}>
-					<Card style={{position: "fixed", top: "20%"}}>
-						<Card.Header>
-							Student Profile
-						</Card.Header>
+					<Card fluid>
+						<Card.Header textAlign="center"><h3>Student Details</h3></Card.Header>
 						<Card.Content>
 							<p>Username: {username}</p>
 							<p>Name: {first_name + " " + last_name}</p>
@@ -38,28 +36,18 @@ class StudentProfilePage extends React.Component {
 							<h4>About me:</h4>
 							<Segment>
 								<p>{description}</p>
-								<p>I want to learn: {subjects.join(", ")}</p>
+								<p><strong>I want to learn: </strong>{subjects.join(", ")}</p>
 							</Segment>
 							</Card.Content>
 					</Card>
 				</Grid.Column>
 				<Grid.Column width={10}>
-					<Grid columns={1}>
-						<Grid.Row>
-							<Grid.Column>
-								<Segment style={{height: "100px"}}>
-
-								</Segment>
-							</Grid.Column>
-						</Grid.Row>
-						<Grid.Row >
-							<Grid.Column>
-								<Card fluid style={{height: "400px", overflow:"auto"}}>
-									{this.props.studentAssignments.length > 0 ? <AssignmentList history={this.props.history} assignments={completedAssignments}/> : null}
-								</Card>
-							</Grid.Column>
-						</Grid.Row>
-					</Grid>
+					<Card fluid style={{height: "400px", overflow:"auto"}}>
+						<Card.Header textAlign="center"><h3>Assignments completed by this student</h3></Card.Header>
+						<Card.Content>
+							{this.props.studentAssignments.length > 0 ? <AssignmentList history={this.props.history} assignments={completedAssignments}/> : null}
+						</Card.Content>
+					</Card>
 				</Grid.Column>
 			</Grid>
 	)

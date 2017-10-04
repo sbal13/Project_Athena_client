@@ -2,6 +2,7 @@ import React from 'react'
 import {Bar} from 'react-chartjs-2';
 import {Card, Select,Segment, Dropdown} from 'semantic-ui-react'
 import {PERCENT_INTERVAL, SUBJECTS} from '../helpers/constants'
+import moment from 'moment'
 
 
 class BarChart extends React.Component {
@@ -61,22 +62,30 @@ class BarChart extends React.Component {
 		
 
 
-		console.log(this.state)
 		const subjects_and_all = [{key: 9, value: "All subjects", text: "All subjects"}, ...SUBJECTS]
-		const assignmentOptions = [{key: this.props.assignments.length, value: "All assignments", text: "All assignments"}, ...this.props.assignments.map((assignment, index)=> ({key: index, value: assignment.details.id, text: assignment.details.title}))]
+		const assignmentOptions = [{key: this.props.assignments.length, value: "All assignments", text: "All assignments"}, ...this.props.assignments.map((assignment, index)=> ({key: index, value: assignment.details.id, text: (assignment.details.historical ? assignment.details.title + ` (HISTORICAL ${moment(assignment.details.created_at).format("MM/DD/YYYY")})` : assignment.details.title)}))]
 
 		const filteredAssignments = this.applyFilters()
 
 
 		const {labels, dataPoints} = this.generateAllData(filteredAssignments)
 
+
+		const color1 = Math.round(Math.random() * 255)
+		const color2 = Math.round(Math.random() * 255)
+		const color3 = Math.round(Math.random() * 255)
+
+		const borderColorString = `rgba(${color1},${color2},${color3},1)`
+		const fillColorString = `rgba(${color1},${color2},${color3},0.5)`
+
+
 		const data = {
 		  labels: labels,
 		  datasets: [
 		    {
 		      label: this.state.subjectFilter,
-		      backgroundColor: 'rgba(255,99,132,0.2)',
-		      borderColor: 'rgba(255,99,132,1)',
+		      backgroundColor: fillColorString,
+		      borderColor: borderColorString,
 		      borderWidth: 1,
 		      hoverBackgroundColor: 'rgba(255,99,132,0.4)',
 		      hoverBorderColor: 'rgba(255,99,132,1)',

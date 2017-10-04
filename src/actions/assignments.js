@@ -49,7 +49,7 @@ export function editAssignment(updatedAssignment, assignmentId, history) {
       .then(json => {
         if (json.success) {
           dispatch({type: "EDIT_ASSIGNMENT", payload: json})
-          history.push("/dashboard", json.success)
+          history.push(`/assignment/${assignmentId}`, json.success)
         } 
       })
     }
