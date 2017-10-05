@@ -8,7 +8,7 @@ class SignupPage extends React.Component {
 	render(){
 		return (
 			<div>
-				{this.props.loggedIn ? <Redirect to='/index'/> : <SignupForm history={this.props.history}/>}
+				{this.props.loggedIn ? <Redirect to='/dashboard'/> : <SignupForm history={this.props.history}/>}
 			</div>)
 	}
 }

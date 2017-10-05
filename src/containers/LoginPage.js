@@ -8,7 +8,7 @@ class LoginPage extends React.Component {
 	render(){
 		return (
 			<div>
-				{this.props.loggedIn ? <Redirect to='/index'/> : <LoginForm history={this.props.history}/>}
+				{this.props.loggedIn ? <Redirect to='/dashboard'/> : <LoginForm history={this.props.history}/>}
 			</div>
 	)}
 }

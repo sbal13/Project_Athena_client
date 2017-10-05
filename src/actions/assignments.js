@@ -1,7 +1,7 @@
 export function newAssignment(assignment, history) {
     
     return function(dispatch) {
-      const url = ' https://athena-academics-api.herokuapp.com/api/v1/assignments'
+      const url = 'https://athena-academics-api.herokuapp.com/api/v1/assignments'
 
       const body = JSON.stringify(assignment)
       const jwtToken = localStorage.getItem("jwt")
@@ -29,7 +29,7 @@ export function newAssignment(assignment, history) {
 export function editAssignment(updatedAssignment, assignmentId, history) {
     
     return function(dispatch) {
-      const url = ` https://athena-academics-api.herokuapp.com/api/v1/assignment/${assignmentId}/edit`
+      const url = `https://athena-academics-api.herokuapp.com/api/v1/assignment/${assignmentId}/edit`
 
       const body = JSON.stringify(updatedAssignment)
       const jwtToken = localStorage.getItem("jwt")
@@ -57,7 +57,7 @@ export function editAssignment(updatedAssignment, assignmentId, history) {
 
 export function getAllAssignments(){
   return function(dispatch) {
-      const url = ' https://athena-academics-api.herokuapp.com/api/v1/assignments'
+      const url = 'https://athena-academics-api.herokuapp.com/api/v1/assignments'
 
       fetch(url)
       .then(res => res.json())
@@ -71,7 +71,7 @@ export function getAllAssignments(){
 
 export function getAssignment(id){
   return function(dispatch){
-    const url = ` https://athena-academics-api.herokuapp.com/api/v1/assignments/${id}`
+    const url = `https://athena-academics-api.herokuapp.com/api/v1/assignments/${id}`
 
     return fetch(url)
     .then(res => res.json())
@@ -85,7 +85,7 @@ export function getAssignment(id){
 
 export function copyAssignment(assignmentId){
   return function(dispatch){
-    const url = ` https://athena-academics-api.herokuapp.com/api/v1/assignment/${assignmentId}/copy`
+    const url = `https://athena-academics-api.herokuapp.com/api/v1/assignment/${assignmentId}/copy`
     const jwtToken = localStorage.getItem("jwt")
     const headers = {
       method: 'post',
@@ -108,7 +108,7 @@ export function copyAssignment(assignmentId){
 
 export function deleteAssignment(assignmentId){
   return function(dispatch){
-    const url = ` https://athena-academics-api.herokuapp.com/api/v1/assignment/${assignmentId}/delete`
+    const url = `https://athena-academics-api.herokuapp.com/api/v1/assignment/${assignmentId}/delete`
     const jwtToken = localStorage.getItem("jwt")
     const headers = {
       method: 'delete',
@@ -131,7 +131,7 @@ export function deleteAssignment(assignmentId){
 
 export function deleteAssigned(assignedId){
   return function(dispatch){
-    const url = ` https://athena-academics-api.herokuapp.com/api/v1/assigned/${assignedId}/delete`
+    const url = `https://athena-academics-api.herokuapp.com/api/v1/assigned/${assignedId}/delete`
     const jwtToken = localStorage.getItem("jwt")
     const headers = {
       method: 'delete',
@@ -154,7 +154,7 @@ export function deleteAssigned(assignedId){
 
 export function submitAssignment(answers, assignmentId){
   return function(dispatch){
-    const url = ` https://athena-academics-api.herokuapp.com/api/v1/submitassignment/${assignmentId}`
+    const url = `https://athena-academics-api.herokuapp.com/api/v1/submitassignment/${assignmentId}`
 
     const body = JSON.stringify({answers: answers})
     const jwtToken = localStorage.getItem("jwt")
@@ -182,7 +182,7 @@ export function submitAssignment(answers, assignmentId){
 
 export function getTeacherAssignments(id){
     return function(dispatch){
-    const url = ` https://athena-academics-api.herokuapp.com/api/v1/users/${id}/assignments`
+    const url = `https://athena-academics-api.herokuapp.com/api/v1/users/${id}/assignments`
 
     return fetch(url)
     .then(res => res.json())
@@ -196,7 +196,7 @@ export function getTeacherAssignments(id){
 
 export function getStudentAssignments(id){
     return function(dispatch){
-    const url = ` https://athena-academics-api.herokuapp.com/api/v1/users/${id}/assignedassignments`
+    const url = `https://athena-academics-api.herokuapp.com/api/v1/users/${id}/assignedassignments`
 
     return fetch(url)
     .then(res => res.json())
@@ -211,7 +211,7 @@ export function getStudentAssignments(id){
 
 export function assign(students, assignments, dueDate) {
     return function(dispatch){
-      const url = ` https://athena-academics-api.herokuapp.com/api/v1/assignments/assign`
+      const url = `https://athena-academics-api.herokuapp.com/api/v1/assignments/assign`
       const body = JSON.stringify({students: students, assignments: assignments, due_date: dueDate})
       const jwtToken = localStorage.getItem("jwt")
 
@@ -240,7 +240,7 @@ export function assign(students, assignments, dueDate) {
 
 export function getAllIssuedAssignments(teacherId){
     return function(dispatch){
-    const url = ` https://athena-academics-api.herokuapp.com/api/v1/users/${teacherId}/studentsassignments`
+    const url = `https://athena-academics-api.herokuapp.com/api/v1/users/${teacherId}/studentsassignments`
 
     return fetch(url)
     .then(res => res.json())
@@ -254,7 +254,7 @@ export function getAllIssuedAssignments(teacherId){
 
 export function getSubmittedAssignment(issuedAssignmentId){
     return function(dispatch){
-    const url = ` https://athena-academics-api.herokuapp.com/api/v1/submitted/${issuedAssignmentId}`
+    const url = `https://athena-academics-api.herokuapp.com/api/v1/submitted/${issuedAssignmentId}`
 
     return fetch(url)
     .then(res => res.json())
@@ -268,7 +268,7 @@ export function getSubmittedAssignment(issuedAssignmentId){
 
 export function finalizeScore(finalParams,issuedAssignmentId){
     return function(dispatch){
-    const url = ` https://athena-academics-api.herokuapp.com/api/v1/submitted/${issuedAssignmentId}/finalize`
+    const url = `https://athena-academics-api.herokuapp.com/api/v1/submitted/${issuedAssignmentId}/finalize`
     const body = JSON.stringify({final_points: finalParams.pointsPerQuestion, comments: finalParams.comments})
 
 
