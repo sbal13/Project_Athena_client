@@ -97,7 +97,7 @@ class StudentScatterChart extends React.Component {
 
 		let timeOptions = {unit: 'day', stepSize: 1}
 
-		if (differenceInDays > 7 && differenceInDays < 30){
+		if (differenceInDays > 7 && differenceInDays <= 30){
 			timeOptions.stepSize = 7
 		} else if(differenceInDays > 30){
 			timeOptions.unit = "month"
