@@ -53,6 +53,7 @@ const AssignmentTable = ({assignments, isStudent, users, goToAssignment, deleteA
 
 			    		const color = index%2===0 ?  "rgba(200,200,200,0.2)" : "white"
 			    		
+			    		if (user){
 				    	return(
 					    	<Table.Row key={index} style={{backgroundColor: color}}>
 						        <Table.Cell><Link to={`user/${user.id}`}>{user.username}</Link></Table.Cell>
@@ -65,7 +66,11 @@ const AssignmentTable = ({assignments, isStudent, users, goToAssignment, deleteA
 						        <Table.Cell>{score}</Table.Cell>
 						        <Table.Cell>{isStudent ? studentActionsButton : teacherActionsButton}{isStudent ? null : deleteButton}</Table.Cell>
 					    	</Table.Row>
-					)})}
+						)
+				    	} else {
+				    		return null
+				    	}
+					})}
 			    </Table.Body>
 			</Table>
 		)

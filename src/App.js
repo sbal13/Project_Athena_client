@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import { Route } from 'react-router-dom'
+import { Route, Redirect } from 'react-router-dom'
 import NavBar from './components/NavBar'
 import SignupPage from './containers/SignupPage'
 import LoginPage from './containers/LoginPage'
@@ -10,6 +10,7 @@ import CompleteAssignmentPage from './containers/CompleteAssignmentPage'
 import SubmittedAssignmentPage from './containers/SubmittedAssignmentPage'
 import EditAssignmentPage from './containers/EditAssignmentPage'
 import DashboardPage from './containers/DashboardPage'
+import LandingPage from './containers/LandingPage'
 import IndexPage from './containers/IndexPage'
 import {getUserData} from './actions/auth'
 import {connect} from 'react-redux'
@@ -36,7 +37,7 @@ class App extends Component {
         </Grid.Row>
         <Grid.Row>
           <Grid.Column>
-            <Route exact path="/"/>
+            <Route exact path="/" render={()=> <Redirect to="/login"/>}/>
             <Route exact path="/index" render={(props) => <IndexPage {...props} currentUser={this.props.currentUser}/>}/>
             <Route exact path="/signup" component={SignupPage}/>
             <Route exact path="/login" component={LoginPage}/>

@@ -127,7 +127,7 @@ class StudentDash extends React.Component{
 		return (
 			<Grid centered columns={2}>
 				<Grid.Row>
-					<Grid.Column width={3}>
+					<Grid.Column width={4}>
 						<Card fluid>
 							<Card.Header textAlign="center"><h3>Sort and Filter</h3></Card.Header>
 							<Card.Content>
@@ -140,7 +140,7 @@ class StudentDash extends React.Component{
 							</Card.Content>
 						</Card>
 					</Grid.Column>
-					<Grid.Column width={12}>
+					<Grid.Column width={11}>
 						<Card fluid style={{height: "500px", overflow:"auto"}}>
 							{this.state.loaded ? <AssignmentTable users={this.props.teachers} assignments={assignments} isStudent={true} goToAssignment={this.goToAssignment}/>: null}
 						</Card>

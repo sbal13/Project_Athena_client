@@ -165,7 +165,7 @@ class TeacherDash extends React.Component{
 		return (
 			<Grid centered columns={2}>
 				<Grid.Row>
-					<Grid.Column width={3}>
+					<Grid.Column width={4}>
 						<Card fluid>
 							<TeacherDashControls date={this.state.date} 
 												 handleDateChange={this.handleDateChange} 
@@ -182,7 +182,7 @@ class TeacherDash extends React.Component{
 												 filterByStatus= {this.state.filterByStatus}/>
 						</Card>
 					</Grid.Column>
-					<Grid.Column width={12}>
+					<Grid.Column width={11}>
 						<Card fluid style={{height: "524px", overflow:"auto"}}>
 							{this.isLoaded() ? <AssignmentTable users={this.props.students} assignments={assignments}/> : null}
 						</Card>

@@ -22,3 +22,19 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+.landing-page {
+  position: relative;
+
+}
+
+.landing-page-image {
+  margin: auto;
+}
+.landing-page-link {
+  margin: auto;
+}
+
+.landing-page-button {
+  margin: auto;
+}

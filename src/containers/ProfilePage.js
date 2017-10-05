@@ -7,6 +7,9 @@ import StudentProfilePage from './StudentProfilePage'
 class ProfilePage extends React.Component {
 
 	componentWillMount(){
+		if (!this.props.loggedIn) {
+			this.props.history.push('/login')
+		}
 		const userId = this.props.location.pathname.split("/")[2]
 		this.props.getUser(userId)
 	}
@@ -36,7 +39,8 @@ class ProfilePage extends React.Component {
 
 function mapStateToProps (state){
 	return {
-		user: state.user.user
+		user: state.user.user,
+		loggedIn: state.auth.loggedIn
 	}
 }
 

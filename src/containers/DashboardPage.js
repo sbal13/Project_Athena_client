@@ -5,6 +5,13 @@ import TeacherDash from './TeacherDash'
 
 class DashboardPage extends React.Component{
 
+	componentDidMount(){
+		if (!this.props.loggedIn) {
+			this.props.history.push('/login')
+		}
+	}
+
+
 	render(){
 		let dashType;
 		 if(this.props.currentUser.user_type === "teacher") {
@@ -22,7 +29,8 @@ class DashboardPage extends React.Component{
 
 function mapStateToProps(state){
 	return{
-		currentUser: state.auth.currentUser
+		currentUser: state.auth.currentUser,
+		loggedIn: state.auth.loggedIn
 	}
 }
 

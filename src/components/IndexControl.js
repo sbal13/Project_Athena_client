@@ -33,7 +33,7 @@ const IndexControl = ({toggle, chooseFilter, filterBySubject, filterByGrade, cre
 						</Grid.Column>
 					</Grid.Row>
 					<Grid.Row>
-						<Grid.Column width={13}>
+						<Grid.Column width={12}>
 								<Select onChange={chooseFilter} 
 									  name="subjectFilter"
 									  fluid 
@@ -49,7 +49,7 @@ const IndexControl = ({toggle, chooseFilter, filterBySubject, filterByGrade, cre
 						</Grid.Column>
 					</Grid.Row>
 					<Grid.Row>
-						<Grid.Column width={13}>
+						<Grid.Column width={12}>
 								<Select onChange={chooseFilter} 
 								      	  name="gradeFilter"
 								      	  fluid

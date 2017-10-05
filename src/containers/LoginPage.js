@@ -1,18 +1,22 @@
 import React from 'react';
 import LoginForm from '../components/LoginForm'
+import {connect} from 'react-redux'
+import {Redirect} from 'react-router-dom'
 
 class LoginPage extends React.Component {
-	componentWillMount(){
-		if(localStorage.getItem('jwt')){
-			this.props.history.push('/index')
-		}
-	}
+
 	render(){
 		return (
 			<div>
-				<LoginForm history={this.props.history}/>
+				{this.props.loggedIn ? <Redirect to='/index'/> : <LoginForm history={this.props.history}/>}
 			</div>
 	)}
 }
 
-export default LoginPage
+function mapStateToProps(state){
+	return{
+		loggedIn: state.auth.loggedIn
+	}
+}
+
+export default connect(mapStateToProps)(LoginPage)
